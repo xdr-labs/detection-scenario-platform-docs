@@ -1,0 +1,91 @@
+---
+title: "Validation Status"
+description: "Current DSP v1.4.0 provider and runtime validation boundaries."
+---
+
+# Validation Status
+
+The current release documentation describes DSP v1.4.0 as:
+
+**READY WITH KNOWN LIMITATIONS**
+
+## Release-scope status
+
+| Capability | Status |
+| --- | --- |
+| Local execution provider | Validated |
+| Remote command execution via JSP | Validated |
+| Remote command execution via PHP | Validated |
+| Remote artifact upload/download via JSP/PHP | Validated |
+| Remote scenario runner | Validated for JSP/PHP |
+| Remote event collection | Validated for JSP/PHP |
+| Evidence export | Validated for JSP/PHP |
+| Manual verification package | Validated for JSP/PHP |
+| ASPX / Windows IIS webshell runtime | **Not validated — preview** |
+
+## Runtime platforms
+
+| Platform | Status | Boundary |
+| --- | --- | --- |
+| Linux | **Validated** | Local provider plus real JSP/Tomcat and PHP/Apache webshell paths |
+| Windows | **Not yet validated** | ASPX/IIS real execution path remains pending |
+
+## Webshell families
+
+### JSP — validated
+
+Real Tomcat + `shell.jsp` validation completed with the release scenario set, including `host_behavior_check`.
+
+### PHP — validated
+
+Real Apache + PHP + `shell.php` validation completed with the release scenario set, including `host_behavior_check`.
+
+### ASPX — preview
+
+The webshell contract and HTTP transport exist, but the source release documentation explicitly states that real Windows IIS execution has not been validated. Remote bundle execution, collection, artifact handling, and platform dispatch are still Linux-oriented in the current validated path.
+
+<Warning>
+Do not present ASPX/Windows webshell support as validated in customer-facing material until a real Windows IIS validation report is completed.
+</Warning>
+
+## What the validation does and does not prove
+
+DSP release validation covers the **execution pipeline**:
+
+1. Scenario activity can be dispatched.
+2. Events are recorded or collected.
+3. Event bundles reach the local Event Store.
+4. Validation/reporting runs.
+5. Evidence and manual verification templates are generated.
+
+It does not automatically prove that a particular third-party security product fired an alert, assigned a specific severity, or correlated signals into a case.
+
+## Release scope criteria
+
+The Release 1.0 summary identifies four core criteria, met through real JSP/PHP validation:
+
+- remote execution works
+- event bundles are collected
+- evidence packages are exported
+- the manual verification workflow is usable
+
+## Current operator branch
+
+The installation and menu scripts point to:
+
+```text
+release/v1.4.0-rc
+```
+
+The older `release/v1.4.0` branch is treated by the current operator menu as retired because of stale traffic-volume behavior.
+
+## Verification command
+
+On an installed host:
+
+```bash
+dsp --version
+dsp plugins list
+```
+
+Use **Show version/status** from the operator menu to display the current Git branch/commit, DSP version, and active configuration before a customer test.
