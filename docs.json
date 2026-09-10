@@ -6,6 +6,12 @@
   "colors": {
     "primary": "#16A34A"
   },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://dsp.xdr.ooo"
+  },
+  "favicon": "/favicon.svg",
   "navbar": {
     "links": [
       {
