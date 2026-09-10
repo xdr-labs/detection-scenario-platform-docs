@@ -9,7 +9,7 @@ description: "Python 3.11 이상을 사용하는 Linux Operator Host에 DSP를 �
 
 ## 요구사항
 
-현재 Package는 **Python 3.11+**를 요구합니다. Bootstrap Installer는 `git`과 Python `venv` 지원도 필요합니다. `whiptail`은 필수는 아니지만 Menu UI를 위해 권장합니다.
+현재 Package는 **Python 3.11+**를 요구합니다. Bootstrap 방식은 `git`, `curl`, Python `venv` 지원도 필요합니다. `whiptail`은 필수는 아니지만 Menu UI를 위해 권장합니다.
 
 환경을 확인합니다.
 
@@ -17,17 +17,18 @@ description: "Python 3.11 이상을 사용하는 Linux Operator Host에 DSP를 �
 python3 --version
 python3 -c 'import venv; print("venv: OK")'
 git --version
+curl --version
 ```
 
 <Warning>
-`python3`가 3.11보다 낮다면 사용 중인 Linux Distribution에 맞는 Python 3.11+ Runtime을 먼저 설치하세요. Bootstrap Installer는 오래된 Python으로 Virtual Environment를 생성하지 않고 중단하도록 설계되어 있습니다.
+사용 가능한 Python Runtime이 3.11보다 낮다면 사용 중인 Linux Distribution에 맞는 Python 3.11+ Runtime을 먼저 설치하세요. Bootstrap Installer는 오래된 Python으로 Virtual Environment를 생성하지 않고 중단하도록 설계되어 있습니다.
 </Warning>
 
 기본 `python3`가 이미 3.11 이상인 Debian/Ubuntu 계열에서는 일반적으로 다음 Package를 준비하면 됩니다.
 
 ```bash
 sudo apt update
-sudo apt install -y git python3 python3-venv whiptail
+sudo apt install -y git curl python3 python3-venv whiptail
 ```
 
 ## 권장 설치 방법
@@ -45,7 +46,11 @@ Installer는 기본적으로 `$HOME/xdr-poc-script`를 사용하며 다음을 �
 5. `pip install -e .`로 DSP 설치
 6. `dsp-menu.sh` 실행
 
-다른 경로를 사용하려면 Installer 실행 전에 `DSP_REPO_DIR`을 지정합니다.
+<Note>
+Online Bootstrap은 일반적으로 GitHub와 `pip`이 사용하는 Python Package Source에 접근할 수 있어야 합니다. 현재 Bootstrap은 Offline Installer가 아닙니다. 제한된 환경에서는 고객이 승인한 Software Transfer 절차를 이용해 Repository와 필요한 Python Dependency를 미리 반입해야 합니다.
+</Note>
+
+## Custom Install Directory
 
 ```bash
 export DSP_REPO_DIR=/opt/xdr-poc-script
@@ -63,6 +68,19 @@ curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.
 
 ```bash
 $HOME/xdr-poc-script/dsp-menu.sh
+```
+
+## Manual Install
+
+`curl | bash` 방식을 사용하지 않으려면 다음과 같이 직접 설치할 수 있습니다.
+
+```bash
+git clone --branch release/v1.4.0-rc https://github.com/xdr-labs/xdr-poc-script.git "$HOME/xdr-poc-script"
+cd "$HOME/xdr-poc-script"
+python3 -m venv .venv
+.venv/bin/pip install --upgrade pip
+.venv/bin/pip install -e .
+./dsp-menu.sh
 ```
 
 ## 기존 설치 업데이트
@@ -84,15 +102,6 @@ dsp plugins list
 ```
 
 현재 Operator Branch에서 예상되는 Product Version은 `dsp 1.4.0`입니다.
-
-## 주요 경로
-
-| 경로 | 용도 |
-| --- | --- |
-| `~/.dsp/config.env` | Operator 설정 |
-| `~/.dsp/runs/` | Run별 Artifact |
-| `$HOME/xdr-poc-script/.venv/` | 기본 경로의 Python Virtual Environment |
-| `$HOME/xdr-poc-script/dsp-menu.sh` | 기본 경로의 Operator Menu |
 
 <Card title="첫 테스트 실행" icon="rocket" href="/ko/quickstart">
   Webshell 설정 전에 Local Mode + Normal Profile로 먼저 동작을 확인하세요.

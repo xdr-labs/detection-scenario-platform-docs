@@ -9,7 +9,7 @@ Use this page when the [Quick Start](/quickstart) prerequisite check fails or wh
 
 ## Requirements
 
-The current package requires **Python 3.11+**. The bootstrap installer also requires `git` and Python `venv` support. `whiptail` is optional but recommended for the menu UI.
+The current package requires **Python 3.11+**. The bootstrap path also requires `git`, `curl`, and Python `venv` support. `whiptail` is optional but recommended for the menu UI.
 
 Check the environment:
 
@@ -17,17 +17,18 @@ Check the environment:
 python3 --version
 python3 -c 'import venv; print("venv: OK")'
 git --version
+curl --version
 ```
 
 <Warning>
-If `python3` is older than 3.11, install a supported Python runtime for your Linux distribution before running DSP. The bootstrap installer intentionally stops instead of creating a virtual environment with an older Python version.
+If the available Python runtime is older than 3.11, install a supported Python 3.11+ runtime for your Linux distribution before running DSP. The bootstrap installer intentionally stops instead of creating a virtual environment with an older Python version.
 </Warning>
 
 On Debian/Ubuntu systems where the default `python3` is already 3.11 or newer, the usual packages are:
 
 ```bash
 sudo apt update
-sudo apt install -y git python3 python3-venv whiptail
+sudo apt install -y git curl python3 python3-venv whiptail
 ```
 
 ## Recommended install
@@ -45,7 +46,11 @@ The installer uses `$HOME/xdr-poc-script` by default and:
 5. installs DSP with `pip install -e .`
 6. launches `dsp-menu.sh`
 
-To use a custom directory, set `DSP_REPO_DIR` before running the installer.
+<Note>
+The online bootstrap normally needs access to GitHub and to the Python package source used by `pip`. The current bootstrap is not an offline installer. In restricted environments, pre-stage the repository and required Python dependencies using the customer's approved software-transfer process.
+</Note>
+
+## Custom install directory
 
 ```bash
 export DSP_REPO_DIR=/opt/xdr-poc-script
@@ -65,11 +70,22 @@ Launch the default-path installation later with:
 $HOME/xdr-poc-script/dsp-menu.sh
 ```
 
+## Manual install
+
+If you prefer not to pipe a script into `bash`:
+
+```bash
+git clone --branch release/v1.4.0-rc https://github.com/xdr-labs/xdr-poc-script.git "$HOME/xdr-poc-script"
+cd "$HOME/xdr-poc-script"
+python3 -m venv .venv
+.venv/bin/pip install --upgrade pip
+.venv/bin/pip install -e .
+./dsp-menu.sh
+```
+
 ## Update an existing installation
 
-The simplest update method is **1 — Update latest patch** in the operator menu.
-
-You can also rerun the bootstrap installer. It updates the existing repository and preserves `~/.dsp/` state.
+The simplest update method is **1 — Update latest patch** in the operator menu. You can also rerun the bootstrap installer; it updates the existing repository and preserves `~/.dsp/` state.
 
 <Warning>
 The current product scripts use `release/v1.4.0-rc`. The older `release/v1.4.0` branch is explicitly rejected by the installer/menu because it contains retired traffic-volume behavior.
@@ -86,15 +102,6 @@ dsp plugins list
 ```
 
 Expected product version is `dsp 1.4.0` on the current operator branch.
-
-## Important paths
-
-| Path | Purpose |
-| --- | --- |
-| `~/.dsp/config.env` | Persistent operator configuration |
-| `~/.dsp/runs/` | Per-run artifacts |
-| `$HOME/xdr-poc-script/.venv/` | Default-path Python virtual environment |
-| `$HOME/xdr-poc-script/dsp-menu.sh` | Default-path operator menu |
 
 <Card title="Run the first test" icon="rocket" href="/quickstart">
   Continue with local mode and the normal profile before configuring webshell execution.

@@ -17,7 +17,7 @@ DSP가 증명하는 것은 **어떤 Activity를 생성했는가**입니다. 특�
 
 <Steps>
   <Step title="DSP 설치">
-    Python 3.11+와 Git이 있는 Linux Host에서 다음을 실행합니다.
+    Python 3.11+, Git, curl이 있는 Linux Host에서 다음을 실행합니다.
 
     ```bash
     curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
@@ -32,7 +32,7 @@ DSP가 증명하는 것은 **어떤 Activity를 생성했는가**입니다. 특�
 </Steps>
 
 <CardGroup cols={2}>
-  <Card title="5분 빠른 시작" icon="rocket" href="/ko/quickstart">
+  <Card title="빠른 시작" icon="rocket" href="/ko/quickstart">
     사전 조건 확인부터 첫 Report까지 가장 단순한 Local Mode 경로를 따라갑니다.
   </Card>
   <Card title="POC Workflow" icon="diagram-project" href="/ko/poc-program">
@@ -41,7 +41,7 @@ DSP가 증명하는 것은 **어떤 Activity를 생성했는가**입니다. 특�
   <Card title="시나리오 범위" icon="radar" href="/ko/scenarios">
     현재 Network, DNS, Web, Identity, Host Behavior Scenario를 확인합니다.
   </Card>
-  <Card title="XDR Correlation Demo" icon="link" href="/ko/third-party-alert-case-demo">
+  <Card title="XDR Correlation Demo" icon="link" href="/ko/xdr-correlation-demo">
     DSP Evidence, NDR Detection, 선택적인 External Alert을 하나의 XDR Investigation Story로 연결합니다.
   </Card>
 </CardGroup>
@@ -50,7 +50,7 @@ DSP가 증명하는 것은 **어떤 Activity를 생성했는가**입니다. 특�
 
 가장 단순한 첫 실행에는 다음이 필요합니다.
 
-- **Python 3.11+**와 `git`이 설치된 Linux Operator Host
+- **Python 3.11+**, `git`, `curl`이 설치된 Linux Operator Host
 - 테스트가 허가된 **Target CIDR**
 - DSP Host에서 Target Network로의 Network Reachability
 - Detection 결과를 확인할 XDR/NDR Console 접근 권한

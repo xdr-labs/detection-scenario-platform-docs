@@ -16,18 +16,19 @@ For the first run, use **local** execution and the **normal** profile. You do no
 You need a Linux operator host with:
 
 - Python **3.11 or newer**
-- `git`
+- `git` and `curl`
 - network reachability to the authorized target network
 - an approved CIDR and test window
 
-Check the two software requirements first:
+Check the software requirements first:
 
 ```bash
 python3 --version
 git --version
+curl --version
 ```
 
-If Python is older than 3.11, follow [Installation](/installation) before continuing.
+If the available Python runtime is older than 3.11, follow [Installation](/installation) before continuing.
 
 ## 2. Install DSP
 
@@ -65,9 +66,10 @@ Leave webshell settings alone for the first run. They are only needed when traff
 
 Choose **3 — Run scenario**.
 
-The CLI equivalent is:
+For direct CLI use, activate the DSP virtual environment first:
 
 ```bash
+source "$HOME/xdr-poc-script/.venv/bin/activate"
 dsp run --profile normal --target-net 10.10.10.0/24
 ```
 

@@ -17,7 +17,7 @@ DSP proves **what activity it generated**. It does not automatically claim that 
 
 <Steps>
   <Step title="Install DSP">
-    On a Linux host with Python 3.11+ and Git:
+    On a Linux host with Python 3.11+, Git, and curl:
 
     ```bash
     curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
@@ -32,7 +32,7 @@ DSP proves **what activity it generated**. It does not automatically claim that 
 </Steps>
 
 <CardGroup cols={2}>
-  <Card title="5-minute Quick Start" icon="rocket" href="/quickstart">
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
     Use the simplest local-mode path from prerequisites to the first report.
   </Card>
   <Card title="POC Workflow" icon="diagram-project" href="/poc-program">
@@ -41,7 +41,7 @@ DSP proves **what activity it generated**. It does not automatically claim that 
   <Card title="Scenario Coverage" icon="radar" href="/scenarios">
     Review the current network, DNS, web, identity, and host-behavior scenarios.
   </Card>
-  <Card title="XDR Correlation Demo" icon="link" href="/third-party-alert-case-demo">
+  <Card title="XDR Correlation Demo" icon="link" href="/xdr-correlation-demo">
     Combine DSP evidence, NDR detections, and optional external alerts into an XDR investigation story.
   </Card>
 </CardGroup>
@@ -50,7 +50,7 @@ DSP proves **what activity it generated**. It does not automatically claim that 
 
 For the simplest first run, prepare:
 
-- a Linux operator host with **Python 3.11+** and `git`
+- a Linux operator host with **Python 3.11+**, `git`, and `curl`
 - an **authorized target CIDR**
 - network reachability from the DSP host to that target network
 - access to the XDR/NDR console for detection review

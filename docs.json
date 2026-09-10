@@ -38,6 +38,18 @@
     "default": "system",
     "strict": false
   },
+  "redirects": [
+    {
+      "source": "/third-party-alert-case-demo",
+      "destination": "/xdr-correlation-demo",
+      "permanent": true
+    },
+    {
+      "source": "/ko/third-party-alert-case-demo",
+      "destination": "/ko/xdr-correlation-demo",
+      "permanent": true
+    }
+  ],
   "navigation": {
     "languages": [
       {
@@ -51,7 +63,7 @@
           {
             "group": "POC Guide",
             "icon": "shield-check",
-            "pages": ["poc-program", "scenarios", "third-party-alert-case-demo", "reports-and-evidence"]
+            "pages": ["poc-program", "scenarios", "xdr-correlation-demo", "reports-and-evidence"]
           },
           {
             "group": "Setup & Operation",
@@ -76,7 +88,7 @@
           {
             "group": "POC 가이드",
             "icon": "shield-check",
-            "pages": ["ko/poc-program", "ko/scenarios", "ko/third-party-alert-case-demo", "ko/reports-and-evidence"]
+            "pages": ["ko/poc-program", "ko/scenarios", "ko/xdr-correlation-demo", "ko/reports-and-evidence"]
           },
           {
             "group": "설치 및 운영",

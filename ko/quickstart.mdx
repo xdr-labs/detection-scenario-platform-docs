@@ -16,7 +16,7 @@ description: "몇 분 안에 DSP를 설치하고 가장 단순한 XDR/NDR 고객
 다음 조건을 만족하는 Linux Operator Host가 필요합니다.
 
 - Python **3.11 이상**
-- `git`
+- `git`, `curl`
 - 승인된 Target Network로의 Network Reachability
 - 승인된 CIDR과 테스트 시간대
 
@@ -25,9 +25,10 @@ description: "몇 분 안에 DSP를 설치하고 가장 단순한 XDR/NDR 고객
 ```bash
 python3 --version
 git --version
+curl --version
 ```
 
-Python이 3.11보다 낮다면 [설치](/ko/installation) 페이지를 먼저 확인하세요.
+사용 가능한 Python Runtime이 3.11보다 낮다면 [설치](/ko/installation) 페이지를 먼저 확인하세요.
 
 ## 2. DSP 설치
 
@@ -65,9 +66,10 @@ $HOME/xdr-poc-script/dsp-menu.sh
 
 Menu에서 **3 — Run scenario**를 선택합니다.
 
-CLI로 실행한다면 다음과 같습니다.
+CLI를 직접 사용할 경우 먼저 DSP Virtual Environment를 활성화합니다.
 
 ```bash
+source "$HOME/xdr-poc-script/.venv/bin/activate"
 dsp run --profile normal --target-net 10.10.10.0/24
 ```
 
