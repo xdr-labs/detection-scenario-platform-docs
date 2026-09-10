@@ -1,0 +1,85 @@
+---
+title: "Release Notes"
+description: "Customer-facing summary of DSP v1.4.0 and the major operator changes from v1.3.0 and v1.2.0."
+---
+
+# Release Notes
+
+## v1.4.0 — Release 1.0 readiness
+
+DSP v1.4.0 is documented as **READY WITH KNOWN LIMITATIONS**.
+
+### Main milestone
+
+Real-environment remote execution validation was completed for:
+
+- JSP / Tomcat
+- PHP / Apache
+- remote command execution
+- remote artifact upload/download
+- remote scenario runner
+- remote event collection
+- evidence export
+- manual verification packages
+
+ASPX/Windows IIS remains preview because real Windows runtime validation has not been completed.
+
+### Current operator branch
+
+The current bootstrap installer and operator menu use:
+
+```text
+release/v1.4.0-rc
+```
+
+The source menu explicitly treats the historical `release/v1.4.0` branch as retired because it contains stale traffic-volume behavior.
+
+## v1.3.0 — Operator CLI simplification
+
+v1.3.0 changed DSP from a low-level scenario runner into a more operator-oriented product. The normal workflow was reduced to three decisions:
+
+1. where to run — local or webshell
+2. what network to target — `--target-net`
+3. which operational profile to use
+
+Progress output and an evidence summary were also added to the standard CLI.
+
+### Profile evolution
+
+Earlier v1.3.0 documentation described `low`, `normal`, and `high`. The current v1.4.0 runtime has since removed `low` as a distinct profile:
+
+```text
+low      → normal
+balanced → normal
+burst    → high
+```
+
+New documentation and POC procedures should use only `normal` and `high`.
+
+## v1.2.0 — Webshell execution path
+
+v1.2.0 introduced the standard webshell execution path to `dsp run`:
+
+- `--execution-provider webshell`
+- `--webshell-family`
+- `--webshell-url`
+- `--remote-work-dir`
+- `--verify-tls`
+
+It also added the remote scenario runner and automatic collection/import of remote `events.jsonl` bundles.
+
+## Current documentation rule
+
+When older design documents conflict with the current operator branch, this site follows the **current `release/v1.4.0-rc` code and release validation documents**.
+
+That matters especially for:
+
+- profile names (`normal` / `high`)
+- scenario order
+- current traffic volume semantics
+- the retired v1.4.0 branch
+- ASPX validation status
+
+<Card title="Current validation boundaries" icon="circle-check" href="/validation-status">
+  Review what is validated before using DSP in a customer environment.
+</Card>
