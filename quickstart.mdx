@@ -1,0 +1,90 @@
+---
+title: "Quick Start"
+description: "Install DSP and run a first customer-POC scenario set in minutes."
+---
+
+# Quick Start
+
+## 1. Install DSP
+
+On a Debian/Ubuntu-style operator host:
+
+```bash
+sudo apt update
+sudo apt install -y git python3 python3-venv python3-pip whiptail
+
+curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
+```
+
+The installer clones or updates the current operator branch, creates `.venv`, installs DSP, and opens the operator menu. Existing configuration and run artifacts under `~/.dsp/` are preserved.
+
+<Warning>
+The current operator branch referenced by the product scripts is `release/v1.4.0-rc`. The older `release/v1.4.0` branch is explicitly treated as retired by the operator menu.
+</Warning>
+
+## 2. Configure the environment
+
+From the menu, select **Configure environment** and provide:
+
+| Setting | Example | Meaning |
+| --- | --- | --- |
+| Target network | `10.10.10.0/24` | CIDR DSP is allowed to test |
+| Execution mode | `local` | Run from the DSP host |
+| Profile | `normal` | Representative target coverage |
+| Webshell family | `jsp` | Only when using webshell mode |
+| Webshell URL | `http://10.10.10.50:8080/shell.jsp` | Remote shell endpoint |
+| Remote work directory | `/tmp/dsp` | Writable path on the remote host |
+
+Configuration is saved to `~/.dsp/config.env`.
+
+## 3. Run
+
+Choose **Run scenario** in the menu. The menu invokes the same standard CLI used by advanced operators:
+
+```bash
+dsp run --profile normal --target-net 10.10.10.0/24
+```
+
+For validated JSP webshell execution:
+
+```bash
+dsp run \
+  --profile normal \
+  --target-net 10.10.10.0/24 \
+  --execution-provider webshell \
+  --webshell-family jsp \
+  --webshell-url http://10.10.10.50:8080/shell.jsp \
+  --remote-work-dir /tmp/dsp
+```
+
+## 4. Review evidence
+
+After the run, inspect:
+
+```text
+~/.dsp/runs/<run_id>/
+```
+
+Common artifacts include:
+
+- `events.db` — append-only per-run Event Store
+- `events.jsonl` — event export / remote bundle format
+- `traffic_summary.json` — generated activity counters
+- `validation.json` — DSP execution validation
+- `report.md` / `report.json` — run report
+- `verification_checklist.md` — human verification checklist
+- `investigation_notes.md` — analyst notes template
+- `evidence_summary_template.md` — customer-facing evidence template
+
+<Note>
+A successful DSP run proves that the activity and evidence pipeline worked. It does **not** by itself prove that an NDR/EDR/SIEM detection fired. Verify detections and case correlation in the security platform UI.
+</Note>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Understand profiles" icon="sliders" href="/configuration">Learn the difference between `normal` and `high`.</Card>
+  <Card title="Review scenarios" icon="radar" href="/scenarios">See what traffic and host behavior DSP can generate.</Card>
+  <Card title="Use webshell mode" icon="terminal" href="/execution-modes">Understand JSP, PHP, and ASPX support boundaries.</Card>
+  <Card title="Prepare a POC story" icon="presentation-screen" href="/poc-program">Turn generated activity into customer evidence.</Card>
+</CardGroup>
