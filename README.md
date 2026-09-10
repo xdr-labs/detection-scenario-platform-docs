@@ -4,26 +4,24 @@ Mintlify documentation source for **Detection Scenario Platform (DSP)**.
 
 - Product source: https://github.com/xdr-labs/xdr-poc-script
 - Documentation repository: https://github.com/xdr-labs/detection-scenario-platform-docs
-- Recommended custom hostname: `dsp.xdr.ooo`
+- Custom hostname: `dsp.xdr.ooo`
+- Languages: English and Korean
 
-The documentation is grounded in the current DSP `release/v1.4.0-rc` operator branch and Release 1.0 validation material. Older architecture/catalog documents may describe historical profile names or planned scenario status; customer-facing pages prefer current runtime behavior when the sources differ.
+The public documentation is grounded in the current DSP `release/v1.4.0-rc` operator branch and Release 1.0 validation material. Customer-facing positioning is intentionally focused on **XDR and NDR POC validation**.
 
-## Documentation structure
+## Reader path
 
-- Overview / Quick Start
-- Customer POC Program
-- Installation and Configuration
-- Local and Webshell Execution
-- Scenario Coverage
-- CLI Reference
-- 3rd-Party Alert & Case Demo
-- Reports & Evidence
-- Validation Status
-- Safety & Guardrails
-- Troubleshooting
-- Architecture
-- Release Notes
+The navigation is task-oriented:
+
+1. **Start Here** — understand DSP and run it quickly
+2. **POC Guide** — choose scenarios, run a POC, and collect evidence
+3. **Setup & Operation** — install, configure, use webshell mode, and troubleshoot
+4. **Reference** — CLI, validation boundaries, architecture, and release notes
 
 ## Important product boundary
 
-DSP generates observable security activity and execution evidence. It does not automatically assert that a vendor alert fired, that an attack succeeded, or that an XDR case was correlated. Those outcomes require evidence from the connected security platform and human verification.
+DSP generates observable security activity and execution evidence. It does not automatically assert that a vendor alert fired, that an attack succeeded, or that an XDR case was correlated. Those outcomes require evidence from the connected XDR/NDR platform and human verification.
+
+## Public install guidance
+
+The current bootstrap script contains a legacy default repository path. Public documentation therefore sets `DSP_REPO_DIR="$HOME/xdr-poc-script"` explicitly so installation works for normal user accounts without relying on an internal lab path.

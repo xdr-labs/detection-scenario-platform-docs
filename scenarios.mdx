@@ -1,69 +1,65 @@
 ---
 title: "Scenario Coverage"
-description: "Current DSP scenarios for network, DNS, web, identity, and endpoint-oriented POC validation."
+description: "Current DSP network, DNS, web, identity, protocol, and host-behavior scenarios for XDR/NDR POC validation."
 ---
 
 # Scenario Coverage
 
-DSP uses scenario plugins under `scenarios/<id>/`. The current operational profile order contains eleven customer-facing scenarios. The runtime may discover additional internal/test plugins, so `dsp plugins list` is the authoritative view for a specific installation.
+DSP uses scenario plugins under `scenarios/<id>/`. The current operational profile contains eleven customer-facing scenarios. `dsp plugins list` is the authoritative view for the installed build because development branches may contain additional internal/test plugins.
 
 ## Operational scenario set
 
-| Scenario ID | Category | What it generates | Typical POC signal |
+| Scenario ID | Category | Activity generated | Typical POC signal |
 | --- | --- | --- | --- |
-| `host_behavior_check` | Endpoint / EDR | Controlled host-side file/process behavior for endpoint telemetry | EDR / host behavior |
+| `host_behavior_check` | Host behavior | Controlled file/process activity on the execution host | Host-side evidence / XDR context |
 | `port_sweep` | Network | TCP probing across selected hosts/ports | Scan / reconnaissance |
 | `http_followup` | HTTP / Web | Repeated requests and attack-oriented paths against discovered HTTP services | Web scanning / suspicious requests |
-| `sql_injection` | HTTP / Web | SQL-injection-style request patterns, including time-based and `UNION SELECT` signatures | WAF / NDR web attack |
+| `sql_injection` | HTTP / Web | SQL-injection-style requests including time-based and `UNION SELECT` patterns | NDR/web attack visibility |
 | `ssh_failure` | Identity / SSH | Repeated failed SSH authentication behavior | SSH brute-force / auth failure |
 | `ldap_enumeration` | Identity / LDAP | LDAP bind/query enumeration-style activity where LDAP is reachable | Directory enumeration |
-| `smb_login_failure` | Identity / SMB | Repeated SMB authentication failures | SMB bad-auth / brute-force signal |
+| `smb_login_failure` | Identity / SMB | Repeated SMB authentication failures | SMB bad-auth signal |
 | `kerberos_failure` | Identity / Kerberos | Kerberos failure attempts against discovered services | Identity / pre-auth failure |
 | `dga` | DNS | Algorithmically generated domain activity | DGA / DNS anomaly |
-| `rare_protocol_activity` | Network behavior | Low-frequency or unusual protocol activity, including configured burst behavior | Rare protocol / anomaly |
-| `dns_tunnel` | DNS / Exfil-style | Structured DNS query payload activity | DNS tunneling / exfil-style detection |
+| `rare_protocol_activity` | Network behavior | Low-frequency or unusual protocol activity | Rare protocol / anomaly |
+| `dns_tunnel` | DNS | Structured DNS query payload activity | DNS tunneling / exfil-style visibility |
 
 <Note>
-The table describes the **activity DSP generates and the type of signal it is intended to exercise**. It does not guarantee that any specific vendor will create an alert.
+These are **activity and signal targets**, not alert guarantees. Whether an XDR/NDR product creates a detection depends on sensor visibility, policy, rules/models, and the customer environment.
 </Note>
 
-## Customer-facing coverage story
+## How to choose scenarios for a POC
 
-The POC program groups these scenarios into a simpler narrative:
+For most evaluations, start with the `normal` profile and let DSP select the full active scenario order. Use explicit scenarios only when the POC has a narrow objective, such as DNS tunneling or web-attack visibility.
 
-### HTTP / Web
+### Network and discovery
 
-- URL scanning and HTTP follow-up
-- attack-oriented web paths
-- SQL injection attempts
-- non-standard-port HTTP burst behavior where applicable
+- `port_sweep`
+- `rare_protocol_activity`
 
-### SSH
+### DNS
 
-- repeated login failures against discovered SSH services
+- `dga`
+- `dns_tunnel`
 
-### SMB / LDAP / Kerberos
+### Web
 
-- authentication failure and enumeration-style activity when those services are available
+- `http_followup`
+- `sql_injection`
 
-### Network behavior
+### Identity/service behavior
 
-- port sweep
-- rare protocol activity
-- DNS tunnel
-- DGA-style DNS behavior
+- `ssh_failure`
+- `ldap_enumeration`
+- `smb_login_failure`
+- `kerberos_failure`
 
-### Endpoint / EDR
+### Host behavior
 
-- `host_behavior_check` creates controlled host activity suitable for endpoint telemetry and evidence review
-
-### Webshell-focused internal expansion
-
-When using a validated JSP/PHP webshell provider, the same scenario framework can originate internal scanning, discovery, service-specific traffic, DNS activity, and host behavior from the remote host.
+- `host_behavior_check` creates controlled host-side activity that can provide additional context when the XDR environment collects host telemetry.
 
 ## Profile behavior
 
-Both current profiles run the same ordered scenario set:
+Both current profiles use the same ordered scenario set:
 
 ```text
 host_behavior_check → port_sweep → http_followup → sql_injection
@@ -73,14 +69,12 @@ host_behavior_check → port_sweep → http_followup → sql_injection
 
 The difference is target coverage:
 
-- `normal` — limited representative targets, generally up to two for service-oriented scenarios
-- `high` — same per-target volume, expanded to all discovered targets subject to guardrails
+- `normal` — representative targets, generally up to two for service-oriented scenarios
+- `high` — same per-target volume, expanded across more discovered targets subject to guardrails
 
-DNS Tunnel has its own host-selection contract in the current traffic profile, and DGA resolver behavior is also scenario-specific.
+Service-specific scenarios only become meaningful when the corresponding host/service is reachable in the target environment.
 
-## Example explicit scenario run
-
-Advanced operators can run a subset instead of the full profile:
+## Run a specific subset
 
 ```bash
 dsp run \
@@ -89,12 +83,10 @@ dsp run \
   --target-net 10.10.10.0/24
 ```
 
-## Plugin discovery
+Replace the example CIDR with the authorized scope.
 
-See the active registry on the installed version:
+## Check active plugins
 
 ```bash
 dsp plugins list
 ```
-
-This is useful when development branches contain additional scenarios or when a plugin has been disabled due to validation or load status.

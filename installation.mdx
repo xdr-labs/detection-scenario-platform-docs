@@ -1,93 +1,103 @@
 ---
 title: "Installation"
-description: "Install or update DSP with the supported bootstrap workflow."
+description: "Install or update DSP on a Linux operator host with Python 3.11 or newer."
 ---
 
 # Installation
 
+Use this page when the [Quick Start](/quickstart) prerequisite check fails or when you need more control over the install path and launch behavior.
+
 ## Requirements
 
-DSP requires Python 3.11+ and a small set of standard system tools.
+The current package requires **Python 3.11+**. The bootstrap installer also requires `git` and Python `venv` support. `whiptail` is optional but recommended for the menu UI.
+
+Check the environment:
+
+```bash
+python3 --version
+python3 -c 'import venv; print("venv: OK")'
+git --version
+```
+
+<Warning>
+If `python3` is older than 3.11, install a supported Python runtime for your Linux distribution before running DSP. The bootstrap installer intentionally stops instead of creating a virtual environment with an older Python version.
+</Warning>
+
+On Debian/Ubuntu systems where the default `python3` is already 3.11 or newer, the usual packages are:
 
 ```bash
 sudo apt update
-sudo apt install -y git python3 python3-venv python3-pip whiptail
+sudo apt install -y git python3 python3-venv whiptail
 ```
 
-`whiptail` is optional. If it is not installed, the operator menu falls back to a plain numbered prompt.
+## Recommended public install
 
-## Recommended one-command install
+The current bootstrap script honors `DSP_REPO_DIR`. Set it explicitly so the installation is independent of the script's legacy lab default path:
 
 ```bash
+export DSP_REPO_DIR="$HOME/xdr-poc-script"
 curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
 ```
 
-The bootstrap script:
+The installer:
 
-1. Checks `git`, `python3`, Python `venv`, and `pip`/`ensurepip`.
-2. Ensures `~/.dsp/` exists without overwriting an existing `~/.dsp/config.env`.
-3. Clones or updates the operator release branch.
-4. Creates `.venv` if needed.
-5. Installs DSP with `pip install -e .`.
-6. Makes `dsp-menu.sh` executable.
-7. Opens the menu unless `DSP_NO_LAUNCH=1` is set.
-
-Run artifacts under `~/.dsp/runs/` are not deleted by the installer.
+1. verifies `git` and a Python 3.11+ runtime with `venv`
+2. preserves `~/.dsp/config.env` and existing runs
+3. clones or updates the current operator branch
+4. creates or reuses `.venv`
+5. installs DSP with `pip install -e .`
+6. launches `dsp-menu.sh`
 
 ## Install without opening the menu
 
 ```bash
-DSP_NO_LAUNCH=1 bash install-dsp.sh
-```
-
-This is useful for automation, smoke tests, or a controlled install workflow.
-
-## Custom install directory
-
-```bash
-DSP_REPO_DIR=/opt/xdr-poc-script bash install-dsp.sh
-```
-
-The source installer currently defaults to `/home/aella/xdr-poc-script` when `DSP_REPO_DIR` is not specified.
-
-## Update an existing installation
-
-You can rerun the same bootstrap command. The installer is designed to be idempotent:
-
-```bash
+export DSP_REPO_DIR="$HOME/xdr-poc-script"
+export DSP_NO_LAUNCH=1
 curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
 ```
 
-Or choose **Update latest patch** from the operator menu.
+Launch the menu later with:
+
+```bash
+$HOME/xdr-poc-script/dsp-menu.sh
+```
+
+## Update an existing installation
+
+The simplest update method is **1 — Update latest patch** in the operator menu.
+
+You can also rerun the bootstrap installer with the same `DSP_REPO_DIR`:
+
+```bash
+export DSP_REPO_DIR="$HOME/xdr-poc-script"
+curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
+```
 
 <Warning>
-Do not force the menu to use the retired `release/v1.4.0` branch. The current menu explicitly rejects that branch and points operators to `release/v1.4.0-rc` because the retired branch contains stale traffic-volume behavior.
+The current product scripts use `release/v1.4.0-rc`. The older `release/v1.4.0` branch is explicitly rejected by the installer/menu because it contains retired traffic-volume behavior.
 </Warning>
 
 ## Verify the installation
 
 ```bash
-cd /path/to/xdr-poc-script
+cd "$HOME/xdr-poc-script"
 source .venv/bin/activate
 
 dsp --version
 dsp plugins list
 ```
 
-The package exposes two console entry points:
-
-- `dsp` — primary operator CLI
-- `dsp-remote-scenario` — remote scenario runner used by the webshell execution path
+Expected product version is `dsp 1.4.0` on the current operator branch.
 
 ## Important paths
 
 | Path | Purpose |
 | --- | --- |
-| `~/.dsp/config.env` | Operator configuration |
+| `~/.dsp/config.env` | Persistent operator configuration |
 | `~/.dsp/runs/` | Per-run artifacts |
-| `<repo>/.venv/` | Python virtual environment |
-| `<repo>/dsp-menu.sh` | Operator menu |
+| `$HOME/xdr-poc-script/.venv/` | Python virtual environment when using the recommended path |
+| `$HOME/xdr-poc-script/dsp-menu.sh` | Operator menu |
 
-<Card title="Configure DSP" icon="sliders" href="/configuration">
-  Set target CIDR, execution provider, profile, and optional webshell details.
+<Card title="Run the first test" icon="rocket" href="/quickstart">
+  Continue with local mode and the normal profile before configuring webshell execution.
 </Card>

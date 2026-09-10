@@ -1,60 +1,84 @@
 ---
 title: "Detection Scenario Platform"
-description: "Generate realistic security activity, collect evidence, and make XDR/NDR POC value visible and repeatable."
+description: "Generate realistic security activity and evidence for repeatable XDR and NDR customer POC validation."
 ---
 
 # Detection Scenario Platform (DSP)
 
 **Generate realistic, observable security activity for XDR and NDR customer POC validation.**
 
-DSP is a reusable POC platform for environments where there are too few meaningful alerts or cases to demonstrate product value. It discovers targets, runs safe detection-oriented scenarios, records structured events, and produces evidence that engineers can review and use in customer reporting.
+DSP helps POC engineers create repeatable security activity when a customer environment is too quiet to produce enough useful detections during an evaluation. It discovers reachable targets, executes controlled scenarios, records what happened, and produces evidence that can be compared with XDR/NDR detections.
 
 <Note>
-DSP validates **traffic and event generation**. It does not automatically claim that a vendor alert fired or that an XDR case was successfully correlated. Detection, alert, and case outcomes remain subject to the connected security platform and human verification.
+DSP proves **what activity it generated**. It does not automatically claim that an alert fired or that an XDR case was successfully correlated. Detection and case outcomes must be verified in the connected security platform.
 </Note>
 
+## Fastest path
+
+<Steps>
+  <Step title="Install DSP">
+    On a Linux host with Python 3.11+ and Git:
+
+    ```bash
+    export DSP_REPO_DIR="$HOME/xdr-poc-script"
+    curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
+    ```
+  </Step>
+  <Step title="Configure the first run">
+    In the menu choose **Configure environment**, set the authorized target CIDR, select **local**, and use **normal** for the first test.
+  </Step>
+  <Step title="Run and review">
+    Choose **Run scenario**, then **Show latest report** to review what DSP generated.
+  </Step>
+</Steps>
+
 <CardGroup cols={2}>
-  <Card title="Install & Run" icon="rocket" href="/quickstart">
-    Install DSP, configure a target network, and run the first scenario set from the operator menu.
+  <Card title="5-minute Quick Start" icon="rocket" href="/quickstart">
+    Use the simplest local-mode path from prerequisites to the first report.
   </Card>
-  <Card title="POC Program" icon="diagram-project" href="/poc-program">
-    See how discovery, scenario execution, detections, evidence, and case demonstrations fit together.
+  <Card title="POC Workflow" icon="diagram-project" href="/poc-program">
+    See how target discovery, controlled activity, NDR/XDR detection review, and evidence fit together.
   </Card>
   <Card title="Scenario Coverage" icon="radar" href="/scenarios">
-    Review network, DNS, web, identity, and endpoint-oriented scenarios included in the current operational profile.
+    Review the current network, DNS, web, identity, and host-behavior scenarios.
   </Card>
-  <Card title="3rd-Party Alert & Case Demo" icon="link" href="/third-party-alert-case-demo">
-    Build a customer story that brings 3rd-party alerts, NDR detections, and EDR alerts into one investigation workflow.
+  <Card title="XDR Correlation Demo" icon="link" href="/third-party-alert-case-demo">
+    Combine DSP evidence, NDR detections, and optional external alerts into an XDR investigation story.
   </Card>
 </CardGroup>
 
-## Why DSP exists
+## What you need
 
-Secure or isolated customer environments often produce too few useful alerts during a limited POC window. This creates three practical problems: there may be little proof to show in a clean network, customers still need screenshots and evidence for internal reporting, and generic BAS tools may generate activity that does not map cleanly to the detections and workflows the POC team wants to demonstrate.
+For the simplest first run, prepare:
 
-DSP focuses on the missing operational layer: **repeatable, observable activity that can be mapped to detection and investigation workflows without turning the POC into a destructive attack exercise.**
+- a Linux operator host with **Python 3.11+** and `git`
+- an **authorized target CIDR**
+- network reachability from the DSP host to that target network
+- access to the XDR/NDR console for detection review
 
-## What DSP provides
+Normal DSP execution does **not** require an XDR API token. Webshell mode is optional and should be used only when activity must originate from an authorized host inside the target environment.
+
+## What DSP gives you
 
 <CardGroup cols={2}>
+  <Card title="Controlled scenarios" icon="crosshairs">
+    Generate repeatable scan, DNS, web, identity, protocol, and host-behavior activity.
+  </Card>
   <Card title="Discovery-driven execution" icon="magnifying-glass">
-    Start from a target CIDR and let DSP expand targets, discover usable hosts/services through its runtime flow, and execute matching scenarios.
+    Start from a CIDR and let DSP use discovered hosts/services to drive scenario execution.
   </Card>
-  <Card title="Local + Webshell execution" icon="terminal">
-    Run directly from the DSP host or originate activity from a remote webshell host for internal-network POC scenarios.
+  <Card title="Evidence per run" icon="file-lines">
+    Keep structured events, traffic summaries, validation output, reports, and verification templates under one run ID.
   </Card>
-  <Card title="Structured evidence" icon="file-lines">
-    Every run produces an append-only Event Store plus reports, validation output, traffic summaries, and verification templates.
-  </Card>
-  <Card title="Operator-friendly profiles" icon="sliders">
-    Use `normal` for representative targets or `high` to expand the same per-target activity across all discovered targets.
+  <Card title="Simple coverage profiles" icon="sliders">
+    Use `normal` for representative targets or `high` to apply the same per-target volume across more discovered targets.
   </Card>
 </CardGroup>
 
-## Current release status
+## Current validation boundary
 
-DSP v1.4.0 is documented as **READY WITH KNOWN LIMITATIONS**. Local execution and real JSP/PHP webshell execution have been validated. ASPX/Windows IIS support remains preview because the real Windows webshell path has not yet completed runtime validation.
+DSP v1.4.0 is documented as **READY WITH KNOWN LIMITATIONS**. Local execution plus real JSP and PHP webshell execution are validated. ASPX/Windows IIS remains preview because real Windows webshell runtime validation is still pending.
 
-<Card title="View validation status" icon="circle-check" href="/validation-status">
-  See the exact provider, platform, and webshell validation boundaries before using DSP in a customer POC.
+<Card title="Check validation status" icon="circle-check" href="/validation-status">
+  Review the exact provider and platform boundaries before a customer POC.
 </Card>

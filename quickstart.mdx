@@ -1,90 +1,114 @@
 ---
 title: "Quick Start"
-description: "Install DSP and run a first customer-POC scenario set in minutes."
+description: "Install DSP and complete the simplest XDR/NDR customer POC run in a few minutes."
 ---
 
 # Quick Start
 
-## 1. Install DSP
+This page is the shortest supported path to a first DSP result.
 
-On a Debian/Ubuntu-style operator host:
+<Info>
+For the first run, use **local** execution and the **normal** profile. You do not need webshell mode or XDR API credentials to verify that DSP itself is working.
+</Info>
+
+## 1. Check prerequisites
+
+You need a Linux operator host with:
+
+- Python **3.11 or newer**
+- `git`
+- network reachability to the authorized target network
+- an approved CIDR and test window
+
+Check the two software requirements first:
 
 ```bash
-sudo apt update
-sudo apt install -y git python3 python3-venv python3-pip whiptail
+python3 --version
+git --version
+```
 
+If Python is older than 3.11, follow [Installation](/installation) before continuing.
+
+## 2. Install DSP
+
+Set the install path explicitly, then run the bootstrap installer:
+
+```bash
+export DSP_REPO_DIR="$HOME/xdr-poc-script"
 curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
 ```
 
-The installer clones or updates the current operator branch, creates `.venv`, installs DSP, and opens the operator menu. Existing configuration and run artifacts under `~/.dsp/` are preserved.
+The installer clones or updates DSP, creates `.venv`, installs the package, and opens the operator menu. Existing configuration and run artifacts under `~/.dsp/` are preserved.
+
+<Note>
+The documentation sets `DSP_REPO_DIR` explicitly because the current bootstrap script still carries a legacy lab default path. Using `$HOME/xdr-poc-script` makes the public install path predictable for normal user accounts.
+</Note>
+
+If the menu is not open, launch it with:
+
+```bash
+$HOME/xdr-poc-script/dsp-menu.sh
+```
+
+## 3. Configure the first run
+
+Choose **2 — Configure environment** and set only these values for the simplest test:
+
+| Setting | Recommended first value |
+| --- | --- |
+| Target network | Your **authorized** CIDR, for example `10.10.10.0/24` |
+| Execution mode | `local` |
+| Profile | `normal` |
 
 <Warning>
-The current operator branch referenced by the product scripts is `release/v1.4.0-rc`. The older `release/v1.4.0` branch is explicitly treated as retired by the operator menu.
+Do not use the example CIDR unless it is actually approved for the POC. DSP intentionally generates security-relevant network activity.
 </Warning>
 
-## 2. Configure the environment
+Leave webshell settings alone for the first run. They are only needed when traffic must originate from a remote host inside the customer environment.
 
-From the menu, select **Configure environment** and provide:
+## 4. Run
 
-| Setting | Example | Meaning |
-| --- | --- | --- |
-| Target network | `10.10.10.0/24` | CIDR DSP is allowed to test |
-| Execution mode | `local` | Run from the DSP host |
-| Profile | `normal` | Representative target coverage |
-| Webshell family | `jsp` | Only when using webshell mode |
-| Webshell URL | `http://10.10.10.50:8080/shell.jsp` | Remote shell endpoint |
-| Remote work directory | `/tmp/dsp` | Writable path on the remote host |
+Choose **3 — Run scenario**.
 
-Configuration is saved to `~/.dsp/config.env`.
-
-## 3. Run
-
-Choose **Run scenario** in the menu. The menu invokes the same standard CLI used by advanced operators:
+The CLI equivalent is:
 
 ```bash
 dsp run --profile normal --target-net 10.10.10.0/24
 ```
 
-For validated JSP webshell execution:
+Replace the example CIDR with the authorized target network.
 
-```bash
-dsp run \
-  --profile normal \
-  --target-net 10.10.10.0/24 \
-  --execution-provider webshell \
-  --webshell-family jsp \
-  --webshell-url http://10.10.10.50:8080/shell.jsp \
-  --remote-work-dir /tmp/dsp
-```
+## 5. Review the result
 
-## 4. Review evidence
+The fastest check is **4 — Show latest report** in the menu.
 
-After the run, inspect:
+Each run is also stored under:
 
 ```text
 ~/.dsp/runs/<run_id>/
 ```
 
-Common artifacts include:
+Start with these three files:
 
-- `events.db` — append-only per-run Event Store
-- `events.jsonl` — event export / remote bundle format
-- `traffic_summary.json` — generated activity counters
-- `validation.json` — DSP execution validation
-- `report.md` / `report.json` — run report
-- `verification_checklist.md` — human verification checklist
-- `investigation_notes.md` — analyst notes template
-- `evidence_summary_template.md` — customer-facing evidence template
+| File | Why to check it first |
+| --- | --- |
+| `traffic_summary.json` | Confirms what activity DSP attempted/generated |
+| `report.md` | Human-readable run summary |
+| `verification_checklist.md` | Place to record matching XDR/NDR detections and customer evidence |
 
-<Note>
-A successful DSP run proves that the activity and evidence pipeline worked. It does **not** by itself prove that an NDR/EDR/SIEM detection fired. Verify detections and case correlation in the security platform UI.
-</Note>
+Additional artifacts such as `events.db`, `events.jsonl`, and `validation.json` are useful for deeper verification and troubleshooting.
+
+## What counts as success?
+
+A successful DSP run means the **activity-generation and evidence pipeline** worked. It does not guarantee that the XDR/NDR product generated an alert.
+
+For the customer POC, verify the same time window, source/destination hosts, and scenario type in the XDR/NDR console, then record the matching alert or case identifiers in the evidence templates.
 
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="Understand profiles" icon="sliders" href="/configuration">Learn the difference between `normal` and `high`.</Card>
-  <Card title="Review scenarios" icon="radar" href="/scenarios">See what traffic and host behavior DSP can generate.</Card>
-  <Card title="Use webshell mode" icon="terminal" href="/execution-modes">Understand JSP, PHP, and ASPX support boundaries.</Card>
-  <Card title="Prepare a POC story" icon="presentation-screen" href="/poc-program">Turn generated activity into customer evidence.</Card>
+  <Card title="POC workflow" icon="diagram-project" href="/poc-program">Turn a DSP run into a repeatable customer validation process.</Card>
+  <Card title="Scenario coverage" icon="radar" href="/scenarios">See which activity types the current profile can generate.</Card>
+  <Card title="Webshell mode" icon="terminal" href="/execution-modes">Use an authorized internal host as the execution origin when needed.</Card>
+  <Card title="Reports & evidence" icon="file-lines" href="/reports-and-evidence">Understand the run artifacts and evidence chain.</Card>
 </CardGroup>

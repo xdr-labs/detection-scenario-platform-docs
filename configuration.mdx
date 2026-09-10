@@ -1,6 +1,6 @@
 ---
 title: "Configuration & Profiles"
-description: "Configure target scope, execution mode, and DSP operational profiles."
+description: "Configure target scope, execution mode, and DSP coverage profiles for XDR/NDR POCs."
 ---
 
 # Configuration & Profiles
@@ -11,10 +11,10 @@ DSP's operator menu stores persistent settings in:
 ~/.dsp/config.env
 ```
 
-A typical configuration looks like:
+A typical public installation looks like:
 
 ```bash
-DSP_REPO_DIR=/home/aella/xdr-poc-script
+DSP_REPO_DIR=/home/user/xdr-poc-script
 TARGET_NET=10.10.10.0/24
 EXECUTION_MODE=local
 PROFILE=normal
@@ -27,16 +27,27 @@ REMOTE_WORK_DIR=/tmp/dsp
 
 | Setting | Supported values | Notes |
 | --- | --- | --- |
-| `TARGET_NET` | CIDR | Required test scope, e.g. `10.10.10.0/24` |
+| `TARGET_NET` | CIDR | Authorized test scope; replace examples with the approved network |
 | `EXECUTION_MODE` | `local`, `webshell` | Where scenario activity originates |
 | `PROFILE` | `normal`, `high` | Controls target coverage |
 | `WEBSHELL_FAMILY` | `jsp`, `php`, `aspx` | Used only in webshell mode |
-| `WEBSHELL_URL` | HTTP(S) URL | Must point to the authorized shell endpoint |
+| `WEBSHELL_URL` | HTTP(S) URL | Authorized shell endpoint |
 | `REMOTE_WORK_DIR` | Writable remote path | Linux-validated default: `/tmp/dsp` |
+
+## Recommended first configuration
+
+For a first validation run, keep the setup simple:
+
+```text
+EXECUTION_MODE=local
+PROFILE=normal
+```
+
+Set `TARGET_NET` to the approved customer/lab CIDR. Move to webshell mode only when the activity must originate from an authorized host inside the target network.
 
 ## Operational profiles
 
-The current v1.4.0 code supports two profiles:
+The current v1.4.0 runtime supports two profiles:
 
 | Profile | Scenario set | Target coverage | Per-target volume |
 | --- | --- | --- | --- |
@@ -44,7 +55,7 @@ The current v1.4.0 code supports two profiles:
 | `high` | Same scenario set | Expands to all discovered targets, subject to caps | **Same as normal** |
 
 <Note>
-`high` is a **coverage expansion**, not a higher per-target attack intensity. Current traffic templates intentionally keep the per-target volume the same as `normal`.
+`high` expands **coverage**, not per-target intensity. Aggregate traffic can still increase because more discovered hosts participate.
 </Note>
 
 ### Legacy profile names
@@ -57,11 +68,9 @@ The runtime normalizes older names for compatibility:
 | `balanced` | maps to `normal` |
 | `burst` | maps to `high` |
 
-The operator menu itself only presents `normal` and `high`.
+New configurations should use only `normal` and `high`.
 
 ## Current scenario order
-
-For profile-driven runs, DSP uses a discovery-first order:
 
 ```text
 host_behavior_check
@@ -81,7 +90,7 @@ Inactive plugins are filtered out at runtime. In webshell mode, `host_behavior_c
 
 ## Large target guardrail
 
-Target networks wider than `/24` are blocked unless both explicit override controls are provided:
+Networks wider than `/24` are blocked unless both explicit controls are supplied:
 
 ```bash
 dsp run \
@@ -91,11 +100,7 @@ dsp run \
   --max-hosts 10
 ```
 
-Both `--allow-large-target` and `--max-hosts` are required for large network scopes.
-
 ## Advanced explicit scenario selection
-
-Profiles normally choose the scenario set automatically. Advanced users can override the list:
 
 ```bash
 dsp run \
@@ -104,7 +109,7 @@ dsp run \
   --target-net 10.10.10.0/24
 ```
 
-When `--scenarios` is supplied, the explicit list wins. An optional profile still applies volume and host-limit parameters to those scenarios.
+When `--scenarios` is supplied, the explicit list wins. An optional profile still applies volume and host-limit settings to those scenarios.
 
 <Card title="Scenario reference" icon="radar" href="/scenarios">
   Review what each operational scenario is designed to generate.

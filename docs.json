@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Detection Scenario Platform",
-  "description": "Documentation for Detection Scenario Platform (DSP) — realistic security traffic generation, evidence collection, and XDR/NDR POC validation.",
+  "description": "Documentation for Detection Scenario Platform (DSP) — realistic security activity generation, evidence collection, and XDR/NDR customer POC validation.",
   "colors": {
     "primary": "#16A34A"
   },
@@ -21,7 +21,7 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Quick Start",
+      "label": "Get Started",
       "href": "/quickstart"
     }
   },
@@ -44,24 +44,24 @@
         "language": "en",
         "groups": [
           {
-            "group": "Overview",
-            "icon": "radar",
-            "pages": ["index", "quickstart", "poc-program"]
+            "group": "Start Here",
+            "icon": "rocket",
+            "pages": ["index", "quickstart"]
           },
           {
-            "group": "Using DSP",
-            "icon": "terminal",
-            "pages": ["installation", "configuration", "execution-modes", "scenarios", "cli-reference"]
-          },
-          {
-            "group": "POC & Evidence",
+            "group": "POC Guide",
             "icon": "shield-check",
-            "pages": ["third-party-alert-case-demo", "reports-and-evidence", "validation-status"]
+            "pages": ["poc-program", "scenarios", "third-party-alert-case-demo", "reports-and-evidence"]
           },
           {
-            "group": "Operations",
-            "icon": "gears",
-            "pages": ["safety-and-guardrails", "troubleshooting", "architecture", "release-notes"]
+            "group": "Setup & Operation",
+            "icon": "terminal",
+            "pages": ["installation", "configuration", "execution-modes", "safety-and-guardrails", "troubleshooting"]
+          },
+          {
+            "group": "Reference",
+            "icon": "book",
+            "pages": ["cli-reference", "validation-status", "architecture", "release-notes"]
           }
         ]
       },
@@ -69,24 +69,24 @@
         "language": "ko",
         "groups": [
           {
-            "group": "개요",
-            "icon": "radar",
-            "pages": ["ko/index", "ko/quickstart", "ko/poc-program"]
+            "group": "시작하기",
+            "icon": "rocket",
+            "pages": ["ko/index", "ko/quickstart"]
           },
           {
-            "group": "DSP 사용",
-            "icon": "terminal",
-            "pages": ["ko/installation", "ko/configuration", "ko/execution-modes", "ko/scenarios", "ko/cli-reference"]
-          },
-          {
-            "group": "POC 및 Evidence",
+            "group": "POC 가이드",
             "icon": "shield-check",
-            "pages": ["ko/third-party-alert-case-demo", "ko/reports-and-evidence", "ko/validation-status"]
+            "pages": ["ko/poc-program", "ko/scenarios", "ko/third-party-alert-case-demo", "ko/reports-and-evidence"]
           },
           {
-            "group": "운영",
-            "icon": "gears",
-            "pages": ["ko/safety-and-guardrails", "ko/troubleshooting", "ko/architecture", "ko/release-notes"]
+            "group": "설치 및 운영",
+            "icon": "terminal",
+            "pages": ["ko/installation", "ko/configuration", "ko/execution-modes", "ko/safety-and-guardrails", "ko/troubleshooting"]
+          },
+          {
+            "group": "참조",
+            "icon": "book",
+            "pages": ["ko/cli-reference", "ko/validation-status", "ko/architecture", "ko/release-notes"]
           }
         ]
       }
