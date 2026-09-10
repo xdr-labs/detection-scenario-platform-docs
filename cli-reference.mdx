@@ -1,0 +1,134 @@
+---
+title: "CLI Reference"
+description: "Operator and advanced command-line options for the DSP v1.4.0 runtime."
+---
+
+# CLI Reference
+
+The primary command is:
+
+```bash
+dsp <command> [options]
+```
+
+## Version
+
+```bash
+dsp --version
+```
+
+## Run scenarios
+
+```bash
+dsp run --target-net 10.10.10.0/24 --profile normal
+```
+
+### Main run options
+
+| Option | Values / default | Purpose |
+| --- | --- | --- |
+| `--target-net` | default `10.10.10.0/24` | Authorized target CIDR |
+| `--profile` | `normal`, `high` | Automatic operational scenario plan |
+| `--scenarios` | comma-separated IDs | Advanced explicit scenario list |
+| `--execution-provider` | `local` / `webshell` | Where scenarios execute |
+| `--dry-run` | flag | Run without network activity |
+| `--quiet` | flag | Suppress operational progress output |
+| `--verbose` | flag | Show detailed per-action progress |
+| `--max-hosts` | integer | Cap target expansion and scenario host selection |
+| `--allow-large-target` | flag | Permit CIDR wider than `/24`; requires `--max-hosts` |
+
+### Webshell options
+
+| Option | Values / default | Purpose |
+| --- | --- | --- |
+| `--webshell-family` | `jsp`, `php`, `aspx` | Required for webshell mode |
+| `--webshell-url` | URL | Required remote endpoint |
+| `--remote-work-dir` | `/tmp/dsp` | Remote bundle/output directory |
+| `--verify-tls` | flag | Verify TLS certificate on webshell transport |
+
+### Detection-confirmation options
+
+DSP has an optional S3 confirmation stage:
+
+| Option | Values / default | Purpose |
+| --- | --- | --- |
+| `--confirm-detection` | flag | Run optional confirmation after DSP execution validation |
+| `--detection-provider` | default `stellar` | Detection provider name |
+| `--stellar-client` | `manual`, `mock`, `http` | Manual evidence, local mock, or experimental live HTTP mode |
+
+<Note>
+S3 confirmation is optional and does **not** change S2 exit codes or DSP `ValidationResult`. Normal DSP operation does not require Stellar API credentials.
+</Note>
+
+Manual confirmation package:
+
+```bash
+dsp run --profile normal --confirm-detection
+```
+
+Deterministic local mock for CI/demo:
+
+```bash
+dsp run --profile normal --confirm-detection --stellar-client mock
+```
+
+The live Stellar HTTP client is marked experimental in the source repository and requires environment-specific API configuration.
+
+## Explicit scenario selection
+
+```bash
+dsp run \
+  --scenarios dns_tunnel,http_followup \
+  --profile normal \
+  --target-net 10.10.10.0/24
+```
+
+`--scenarios` overrides automatic profile coverage. Supplying `--profile` at the same time still applies profile volume/host settings to the selected scenarios.
+
+## Webshell example
+
+```bash
+dsp run \
+  --profile normal \
+  --target-net 10.10.10.0/24 \
+  --execution-provider webshell \
+  --webshell-family php \
+  --webshell-url http://10.10.10.50/shell.php \
+  --remote-work-dir /tmp/dsp
+```
+
+## Large CIDR example
+
+```bash
+dsp run \
+  --profile high \
+  --target-net 10.0.0.0/16 \
+  --allow-large-target \
+  --max-hosts 10
+```
+
+## Plugin management
+
+```bash
+dsp plugins list
+```
+
+The command prints discovered plugin IDs, status, and any status reason.
+
+## Regenerate a report
+
+```bash
+dsp report --run-id <run_id>
+```
+
+This regenerates the report from existing run artifacts.
+
+## Remote runner
+
+The Python package also installs:
+
+```text
+dsp-remote-scenario
+```
+
+This entry point is part of the remote webshell execution pipeline and is normally orchestrated by DSP rather than invoked manually by POC operators.
