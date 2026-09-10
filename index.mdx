@@ -1,0 +1,60 @@
+---
+title: "Detection Scenario Platform"
+description: "Generate realistic security activity, collect evidence, and make XDR/NDR/EDR POC value visible and repeatable."
+---
+
+# Detection Scenario Platform (DSP)
+
+**Generate realistic, observable security activity for XDR, NDR, EDR, SIEM, and customer POC validation.**
+
+DSP is a reusable POC platform for environments where there are too few meaningful alerts or cases to demonstrate product value. It discovers targets, runs safe detection-oriented scenarios, records structured events, and produces evidence that engineers can review and use in customer reporting.
+
+<Note>
+DSP validates **traffic and event generation**. It does not automatically claim that a vendor alert fired or that an XDR case was successfully correlated. Detection, alert, and case outcomes remain subject to the connected security platform and human verification.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Install & Run" icon="rocket" href="/quickstart">
+    Install DSP, configure a target network, and run the first scenario set from the operator menu.
+  </Card>
+  <Card title="POC Program" icon="diagram-project" href="/poc-program">
+    See how discovery, scenario execution, detections, evidence, and case demonstrations fit together.
+  </Card>
+  <Card title="Scenario Coverage" icon="radar" href="/scenarios">
+    Review network, DNS, web, identity, and endpoint-oriented scenarios included in the current operational profile.
+  </Card>
+  <Card title="3rd-Party Alert & Case Demo" icon="link" href="/third-party-alert-case-demo">
+    Build a customer story that brings 3rd-party alerts, NDR detections, and EDR alerts into one investigation workflow.
+  </Card>
+</CardGroup>
+
+## Why DSP exists
+
+Secure or isolated customer environments often produce too few useful alerts during a limited POC window. This creates three practical problems: there may be little proof to show in a clean network, customers still need screenshots and evidence for internal reporting, and generic BAS tools may generate activity that does not map cleanly to the detections and workflows the POC team wants to demonstrate.
+
+DSP focuses on the missing operational layer: **repeatable, observable activity that can be mapped to detection and investigation workflows without turning the POC into a destructive attack exercise.**
+
+## What DSP provides
+
+<CardGroup cols={2}>
+  <Card title="Discovery-driven execution" icon="magnifying-glass">
+    Start from a target CIDR and let DSP expand targets, discover usable hosts/services through its runtime flow, and execute matching scenarios.
+  </Card>
+  <Card title="Local + Webshell execution" icon="terminal">
+    Run directly from the DSP host or originate activity from a remote webshell host for internal-network POC scenarios.
+  </Card>
+  <Card title="Structured evidence" icon="file-lines">
+    Every run produces an append-only Event Store plus reports, validation output, traffic summaries, and verification templates.
+  </Card>
+  <Card title="Operator-friendly profiles" icon="sliders">
+    Use `normal` for representative targets or `high` to expand the same per-target activity across all discovered targets.
+  </Card>
+</CardGroup>
+
+## Current release status
+
+DSP v1.4.0 is documented as **READY WITH KNOWN LIMITATIONS**. Local execution and real JSP/PHP webshell execution have been validated. ASPX/Windows IIS support remains preview because the real Windows webshell path has not yet completed runtime validation.
+
+<Card title="View validation status" icon="circle-check" href="/validation-status">
+  See the exact provider, platform, and webshell validation boundaries before using DSP in a customer POC.
+</Card>
