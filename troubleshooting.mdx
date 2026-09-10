@@ -1,0 +1,141 @@
+---
+title: "Troubleshooting"
+description: "Common installation, profile, target-scope, webshell, and evidence issues in DSP."
+---
+
+# Troubleshooting
+
+## `dsp: command not found`
+
+Activate the repository virtual environment or reinstall the editable package:
+
+```bash
+cd /path/to/xdr-poc-script
+python3 -m venv .venv
+.venv/bin/pip install -e .
+source .venv/bin/activate
+
+dsp --version
+```
+
+The operator menu automatically adds `<repo>/.venv/bin` to `PATH` when the environment exists.
+
+## Menu opens without the graphical TUI
+
+Install `whiptail`:
+
+```bash
+sudo apt install -y whiptail
+```
+
+DSP still works without it; the menu falls back to a plain numbered terminal interface.
+
+## `low` profile behaves like `normal`
+
+This is expected in the current v1.4.0 runtime. `low` is a legacy alias and is normalized to `normal`.
+
+Use only:
+
+```text
+normal
+high
+```
+
+in new configuration.
+
+## Target network wider than `/24` is rejected
+
+This is a safety guardrail. Supply both an explicit large-target override and a host cap:
+
+```bash
+dsp run \
+  --profile high \
+  --target-net 10.0.0.0/16 \
+  --allow-large-target \
+  --max-hosts 10
+```
+
+## Menu reports stale `normal` profile volumes
+
+The current menu contains a preflight check that protects against stale checkouts/editable installs.
+
+Choose **Update latest patch**, then refresh the editable install if necessary:
+
+```bash
+cd /path/to/xdr-poc-script
+git fetch origin
+git checkout release/v1.4.0-rc
+git pull origin release/v1.4.0-rc
+.venv/bin/pip install -e .
+```
+
+Do not switch back to the retired `release/v1.4.0` branch.
+
+## Webshell family and URL do not match
+
+Check the extension:
+
+```text
+jsp  → .../shell.jsp
+php  → .../shell.php
+aspx → .../shell.aspx
+```
+
+JSP and PHP are the validated families. ASPX remains preview.
+
+## Webshell run cannot write remote artifacts
+
+Confirm that `--remote-work-dir` points to a writable location on the remote host. The Linux-validated default is:
+
+```text
+/tmp/dsp
+```
+
+The remote path is used to stage scenario execution and event bundles.
+
+## HTTPS webshell certificate issue
+
+When certificate validation is required, use:
+
+```bash
+--verify-tls
+```
+
+For a lab with intentionally self-signed certificates, decide the TLS policy with the customer before testing rather than silently changing verification expectations.
+
+## Run completes but no alert is visible
+
+DSP execution success and vendor alert success are different layers.
+
+Check in this order:
+
+1. `traffic_summary.json` — was the intended activity generated?
+2. `events.db` / `events.jsonl` — were DSP events recorded?
+3. `validation.json` — did DSP's own validation pass?
+4. time window and source/destination addresses in the security platform
+5. sensor/collector visibility and policy scope
+6. vendor detection/rule configuration
+
+Do not treat the absence of a vendor alert as a DSP execution failure until the DSP evidence itself is checked.
+
+## `report.md` is missing or needs to be rebuilt
+
+Regenerate from the stored run:
+
+```bash
+dsp report --run-id <run_id>
+```
+
+## Need to confirm the exact installed state
+
+Use **Show version/status** in the menu or run:
+
+```bash
+git branch --show-current
+git log -1 --oneline
+dsp --version
+dsp plugins list
+cat ~/.dsp/config.env
+```
+
+These checks are especially useful before collecting customer POC evidence.
