@@ -1,0 +1,134 @@
+---
+title: "CLI Reference"
+description: "DSP v1.4.0 Runtime의 Operator 및 Advanced Command-line Option을 설명합니다."
+---
+
+# CLI Reference
+
+기본 명령 형식은 다음과 같습니다.
+
+```bash
+dsp <command> [options]
+```
+
+## Version 확인
+
+```bash
+dsp --version
+```
+
+## Scenario 실행
+
+```bash
+dsp run --target-net 10.10.10.0/24 --profile normal
+```
+
+### 주요 Run Option
+
+| Option | 값 / 기본값 | 용도 |
+| --- | --- | --- |
+| `--target-net` | 기본값 `10.10.10.0/24` | 승인된 Target CIDR |
+| `--profile` | `normal`, `high` | 자동 Operational Scenario Plan |
+| `--scenarios` | 쉼표로 구분한 ID | Advanced Scenario 직접 선택 |
+| `--execution-provider` | `local` / `webshell` | Scenario 실행 위치 |
+| `--dry-run` | Flag | Network Activity 없이 실행 |
+| `--quiet` | Flag | Operational Progress Output 숨김 |
+| `--verbose` | Flag | 각 Action의 상세 Progress 표시 |
+| `--max-hosts` | 정수 | Target Expansion 및 Scenario Host Selection 상한 |
+| `--allow-large-target` | Flag | `/24`보다 큰 CIDR 허용, `--max-hosts` 필요 |
+
+### Webshell Option
+
+| Option | 값 / 기본값 | 용도 |
+| --- | --- | --- |
+| `--webshell-family` | `jsp`, `php`, `aspx` | Webshell Mode에서 필수 |
+| `--webshell-url` | URL | 필수 Remote Endpoint |
+| `--remote-work-dir` | `/tmp/dsp` | Remote Bundle/Output Directory |
+| `--verify-tls` | Flag | Webshell Transport의 TLS Certificate 검증 |
+
+### Detection Confirmation Option
+
+DSP에는 선택적인 S3 Confirmation 단계가 있습니다.
+
+| Option | 값 / 기본값 | 용도 |
+| --- | --- | --- |
+| `--confirm-detection` | Flag | DSP Execution Validation 이후 선택적인 Detection Confirmation 수행 |
+| `--detection-provider` | 기본값 `stellar` | Detection Provider 이름 |
+| `--stellar-client` | `manual`, `mock`, `http` | Manual Evidence, Local Mock 또는 Experimental Live HTTP Mode |
+
+<Note>
+S3 Confirmation은 선택 사항이며 S2 Exit Code나 DSP `ValidationResult`를 변경하지 않습니다. 일반적인 DSP 운영에는 Stellar API Credential이 필요하지 않습니다.
+</Note>
+
+Manual Confirmation Package:
+
+```bash
+dsp run --profile normal --confirm-detection
+```
+
+CI/Demo용 Deterministic Local Mock:
+
+```bash
+dsp run --profile normal --confirm-detection --stellar-client mock
+```
+
+Live Stellar HTTP Client는 Source Repository에서 Experimental로 표시되어 있으며 환경별 API 설정이 필요합니다.
+
+## Scenario 직접 선택
+
+```bash
+dsp run \
+  --scenarios dns_tunnel,http_followup \
+  --profile normal \
+  --target-net 10.10.10.0/24
+```
+
+`--scenarios`는 자동 Profile Coverage보다 우선합니다. 동시에 `--profile`을 지정하면 선택된 Scenario에 Profile의 Volume/Host 설정이 적용됩니다.
+
+## Webshell 예시
+
+```bash
+dsp run \
+  --profile normal \
+  --target-net 10.10.10.0/24 \
+  --execution-provider webshell \
+  --webshell-family php \
+  --webshell-url http://10.10.10.50/shell.php \
+  --remote-work-dir /tmp/dsp
+```
+
+## 대규모 CIDR 예시
+
+```bash
+dsp run \
+  --profile high \
+  --target-net 10.0.0.0/16 \
+  --allow-large-target \
+  --max-hosts 10
+```
+
+## Plugin 관리
+
+```bash
+dsp plugins list
+```
+
+발견된 Plugin ID, Status 및 Status Reason을 표시합니다.
+
+## Report 재생성
+
+```bash
+dsp report --run-id <run_id>
+```
+
+기존 Run Artifact에서 Report를 다시 생성합니다.
+
+## Remote Runner
+
+Python Package는 다음 Entry Point도 설치합니다.
+
+```text
+dsp-remote-scenario
+```
+
+이 Entry Point는 Remote Webshell Execution Pipeline의 일부이며 일반적으로 POC Operator가 직접 실행하는 것이 아니라 DSP가 자동으로 Orchestration합니다.

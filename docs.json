@@ -39,26 +39,56 @@
     "strict": false
   },
   "navigation": {
-    "groups": [
+    "languages": [
       {
-        "group": "Overview",
-        "icon": "radar",
-        "pages": ["index", "quickstart", "poc-program"]
+        "language": "en",
+        "groups": [
+          {
+            "group": "Overview",
+            "icon": "radar",
+            "pages": ["index", "quickstart", "poc-program"]
+          },
+          {
+            "group": "Using DSP",
+            "icon": "terminal",
+            "pages": ["installation", "configuration", "execution-modes", "scenarios", "cli-reference"]
+          },
+          {
+            "group": "POC & Evidence",
+            "icon": "shield-check",
+            "pages": ["third-party-alert-case-demo", "reports-and-evidence", "validation-status"]
+          },
+          {
+            "group": "Operations",
+            "icon": "gears",
+            "pages": ["safety-and-guardrails", "troubleshooting", "architecture", "release-notes"]
+          }
+        ]
       },
       {
-        "group": "Using DSP",
-        "icon": "terminal",
-        "pages": ["installation", "configuration", "execution-modes", "scenarios", "cli-reference"]
-      },
-      {
-        "group": "POC & Evidence",
-        "icon": "shield-check",
-        "pages": ["third-party-alert-case-demo", "reports-and-evidence", "validation-status"]
-      },
-      {
-        "group": "Operations",
-        "icon": "gears",
-        "pages": ["safety-and-guardrails", "troubleshooting", "architecture", "release-notes"]
+        "language": "ko",
+        "groups": [
+          {
+            "group": "개요",
+            "icon": "radar",
+            "pages": ["ko/index", "ko/quickstart", "ko/poc-program"]
+          },
+          {
+            "group": "DSP 사용",
+            "icon": "terminal",
+            "pages": ["ko/installation", "ko/configuration", "ko/execution-modes", "ko/scenarios", "ko/cli-reference"]
+          },
+          {
+            "group": "POC 및 Evidence",
+            "icon": "shield-check",
+            "pages": ["ko/third-party-alert-case-demo", "ko/reports-and-evidence", "ko/validation-status"]
+          },
+          {
+            "group": "운영",
+            "icon": "gears",
+            "pages": ["ko/safety-and-guardrails", "ko/troubleshooting", "ko/architecture", "ko/release-notes"]
+          }
+        ]
       }
     ]
   }

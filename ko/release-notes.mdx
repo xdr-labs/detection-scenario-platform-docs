@@ -1,0 +1,85 @@
+---
+title: "Release Notes"
+description: "DSP v1.4.0과 v1.3.0, v1.2.0의 주요 Operator 변경사항을 고객 관점에서 정리합니다."
+---
+
+# Release Notes
+
+## v1.4.0 — Release 1.0 Readiness
+
+DSP v1.4.0은 **READY WITH KNOWN LIMITATIONS** 상태로 문서화되어 있습니다.
+
+### 주요 Milestone
+
+실제 환경의 Remote Execution Validation이 다음 항목에 대해 완료되었습니다.
+
+- JSP / Tomcat
+- PHP / Apache
+- Remote Command Execution
+- Remote Artifact Upload/Download
+- Remote Scenario Runner
+- Remote Event Collection
+- Evidence Export
+- Manual Verification Package
+
+ASPX/Windows IIS는 실제 Windows Runtime Validation이 완료되지 않았기 때문에 Preview 상태입니다.
+
+### 현재 Operator Branch
+
+현재 Bootstrap Installer와 Operator Menu는 다음 Branch를 사용합니다.
+
+```text
+release/v1.4.0-rc
+```
+
+Source Menu는 이전 `release/v1.4.0` Branch에 오래된 Traffic Volume 동작이 포함되어 있기 때문에 해당 Branch를 명시적으로 Retired 상태로 처리합니다.
+
+## v1.3.0 — Operator CLI 단순화
+
+v1.3.0에서는 DSP가 Low-level Scenario Runner에서 보다 Operator 중심의 제품으로 변경되었습니다. 일반적인 Workflow는 다음 세 가지 결정으로 단순화되었습니다.
+
+1. 어디에서 실행할 것인가 — Local 또는 Webshell
+2. 어떤 Network를 대상으로 할 것인가 — `--target-net`
+3. 어떤 Operational Profile을 사용할 것인가
+
+표준 CLI에 Progress Output과 Evidence Summary도 추가되었습니다.
+
+### Profile 변화
+
+초기 v1.3.0 Documentation은 `low`, `normal`, `high`를 설명했지만 현재 v1.4.0 Runtime에서는 `low`가 독립 Profile에서 제거되었습니다.
+
+```text
+low      → normal
+balanced → normal
+burst    → high
+```
+
+새 Documentation 및 POC Procedure에서는 `normal`과 `high`만 사용해야 합니다.
+
+## v1.2.0 — Webshell Execution Path
+
+v1.2.0은 표준 `dsp run`에 Webshell Execution Path를 추가했습니다.
+
+- `--execution-provider webshell`
+- `--webshell-family`
+- `--webshell-url`
+- `--remote-work-dir`
+- `--verify-tls`
+
+또한 Remote Scenario Runner와 Remote `events.jsonl` Bundle의 자동 Collection/Import 기능이 추가되었습니다.
+
+## 현재 Documentation 기준
+
+이전 Design Document와 현재 Operator Branch의 내용이 충돌하는 경우 이 사이트는 **현재 `release/v1.4.0-rc` Code와 Release Validation Document**를 기준으로 합니다.
+
+특히 다음 항목은 현재 구현을 기준으로 확인해야 합니다.
+
+- Profile 이름 (`normal` / `high`)
+- Scenario 순서
+- 현재 Traffic Volume 의미
+- Retired된 v1.4.0 Branch
+- ASPX Validation 상태
+
+<Card title="현재 Validation 범위" icon="circle-check" href="/ko/validation-status">
+  고객 환경에서 DSP를 사용하기 전에 현재 검증된 범위를 확인합니다.
+</Card>

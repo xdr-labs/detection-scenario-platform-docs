@@ -1,0 +1,97 @@
+---
+title: "안전 및 Guardrail"
+description: "DSP를 승인된 POC Scope에서만 사용하고 내장된 Target 및 Execution Safeguard를 이해합니다."
+---
+
+# 안전 및 Guardrail
+
+DSP는 **승인된 Lab 및 고객 POC**를 위한 도구입니다. 의도적으로 보안과 관련된 Network 및 Host Activity를 생성하므로 실행 전에 Target Scope와 Activity 발생 위치를 합의해야 합니다.
+
+## 운영 원칙
+
+1. Target CIDR과 Test Window에 대한 명시적인 승인을 받습니다.
+2. 더 넓은 Host Coverage가 의도적으로 필요한 경우가 아니라면 `normal`에서 시작합니다.
+3. Service-oriented Scenario를 실행하기 전에 발견된 Service와 고객 제약사항을 확인합니다.
+4. Webshell Endpoint는 높은 권한을 가진 Test Infrastructure로 취급합니다.
+5. DSP Execution Evidence와 Detection 또는 Compromise에 대한 주장을 분리합니다.
+
+## 대규모 CIDR 보호
+
+DSP는 기본적으로 `/24`보다 큰 Target Network를 차단합니다. 이 Guardrail을 Override하려면 다음 두 옵션이 모두 필요합니다.
+
+```bash
+--allow-large-target
+--max-hosts <N>
+```
+
+예시:
+
+```bash
+dsp run \
+  --profile high \
+  --target-net 10.0.0.0/16 \
+  --allow-large-target \
+  --max-hosts 10
+```
+
+이를 통해 대규모 고객 Network로 Activity가 실수로 확장되는 것을 방지합니다.
+
+## `normal`과 `high`
+
+`high`는 `normal`보다 대상별 Activity Volume을 높이지 **않습니다**. 동일한 대상별 Scenario Behavior를 더 많은 발견된 Host/Service에 확장합니다.
+
+다만 더 많은 Host가 참여하므로 전체 **Aggregate Traffic**은 크게 증가할 수 있습니다.
+
+## Dry Run
+
+Advanced Operator는 다음과 같이 사용할 수 있습니다.
+
+```bash
+dsp run --dry-run --profile normal --target-net 10.10.10.0/24
+```
+
+Network Activity 없이 Configuration 또는 Workflow를 확인할 때 Dry-run Mode를 사용합니다.
+
+## Webshell 위험
+
+Webshell Mode는 Remote Host에서 Command를 실행합니다. POC를 위해 명시적으로 준비되고 승인된 Endpoint에서만 사용하십시오.
+
+<Warning>
+Repository의 Fake JSP Lab Endpoint는 임의의 Shell Command를 실행할 수 있습니다. 격리된 Test 환경에서만 사용하고 Public Internet에 절대로 노출하지 마십시오.
+</Warning>
+
+## 지원되지 않는 주장 방지
+
+DSP Run을 통해 다음을 확인할 수 있습니다.
+
+- Scenario가 Schedule되었는가
+- Traffic/Host Activity가 생성되었는가
+- 구조화된 Event가 기록되었는가
+- DSP Validation/Reporting이 완료되었는가
+
+DSP만으로는 다음을 증명할 수 없습니다.
+
+- 공격이 성공했는가
+- 시스템이 침해되었는가
+- Vendor Detection이 발생했는가
+- Alert이 정확하게 분류되었는가
+- XDR Case가 Correlation되었는가
+
+이 결과는 관련 보안 플랫폼의 별도 Evidence와 사람의 검토가 필요합니다.
+
+## 고객 POC Checklist
+
+실행 전에 다음을 확인합니다.
+
+- 승인된 CIDR
+- 제외해야 하는 Production Asset
+- 허용된 Test Window
+- 허용된 Protocol/Service
+- Local 또는 Webshell Execution Origin
+- Webshell Host의 소유권 및 승인 여부
+- 사용할 Scenario Profile
+- Maximum Host Count
+- 보안 Monitoring Team의 인지 여부
+- Rollback/Stop Procedure
+
+실행 후에는 DSP Run Directory를 보존하고 고객 보안 플랫폼에서 대응되는 Alert/Case Identifier를 기록합니다.
