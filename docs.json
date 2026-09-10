@@ -1,0 +1,59 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Detection Scenario Platform",
+  "description": "Documentation for Detection Scenario Platform (DSP) — realistic security traffic generation, evidence collection, and XDR/NDR/EDR POC validation.",
+  "colors": {
+    "primary": "#16A34A"
+  },
+  "navbar": {
+    "links": [
+      {
+        "type": "github",
+        "href": "https://github.com/xdr-labs/xdr-poc-script"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Quick Start",
+      "href": "/quickstart"
+    }
+  },
+  "search": {
+    "prompt": "Search DSP documentation..."
+  },
+  "seo": {
+    "indexing": "navigable",
+    "metatags": {
+      "canonical": "https://dsp.xdr.ooo"
+    }
+  },
+  "appearance": {
+    "default": "system",
+    "strict": false
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Overview",
+        "icon": "radar",
+        "pages": ["index", "quickstart", "poc-program"]
+      },
+      {
+        "group": "Using DSP",
+        "icon": "terminal",
+        "pages": ["installation", "configuration", "execution-modes", "scenarios", "cli-reference"]
+      },
+      {
+        "group": "POC & Evidence",
+        "icon": "shield-check",
+        "pages": ["third-party-alert-case-demo", "reports-and-evidence", "validation-status"]
+      },
+      {
+        "group": "Operations",
+        "icon": "gears",
+        "pages": ["safety-and-guardrails", "troubleshooting", "architecture", "release-notes"]
+      }
+    ]
+  }
+}
