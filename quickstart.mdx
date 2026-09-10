@@ -31,18 +31,13 @@ If Python is older than 3.11, follow [Installation](/installation) before contin
 
 ## 2. Install DSP
 
-Set the install path explicitly, then run the bootstrap installer:
+Run the bootstrap installer:
 
 ```bash
-export DSP_REPO_DIR="$HOME/xdr-poc-script"
 curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
 ```
 
-The installer clones or updates DSP, creates `.venv`, installs the package, and opens the operator menu. Existing configuration and run artifacts under `~/.dsp/` are preserved.
-
-<Note>
-The documentation sets `DSP_REPO_DIR` explicitly because the current bootstrap script still carries a legacy lab default path. Using `$HOME/xdr-poc-script` makes the public install path predictable for normal user accounts.
-</Note>
+The installer uses `$HOME/xdr-poc-script` by default, clones or updates DSP, creates `.venv`, installs the package, and opens the operator menu. Existing configuration and run artifacts under `~/.dsp/` are preserved.
 
 If the menu is not open, launch it with:
 

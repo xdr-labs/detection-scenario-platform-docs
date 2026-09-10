@@ -5,7 +5,7 @@ description: "Python 3.11 이상을 사용하는 Linux Operator Host에 DSP를 �
 
 # 설치
 
-[빠른 시작](/ko/quickstart)의 사전 조건 확인에서 문제가 있거나 설치 경로와 실행 방식을 직접 제어해야 할 때 이 페이지를 사용하세요.
+[빠른 시작](/ko/quickstart)의 사전 조건 확인에서 문제가 있거나 설치 및 실행 방식을 직접 제어해야 할 때 이 페이지를 사용하세요.
 
 ## 요구사항
 
@@ -30,16 +30,13 @@ sudo apt update
 sudo apt install -y git python3 python3-venv whiptail
 ```
 
-## 권장 공개 설치 방법
-
-현재 Bootstrap Script는 `DSP_REPO_DIR`을 지원합니다. 과거 Lab 기본 경로에 의존하지 않도록 공개 문서에서는 설치 경로를 명시적으로 지정합니다.
+## 권장 설치 방법
 
 ```bash
-export DSP_REPO_DIR="$HOME/xdr-poc-script"
 curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
 ```
 
-Installer는 다음을 수행합니다.
+Installer는 기본적으로 `$HOME/xdr-poc-script`를 사용하며 다음을 수행합니다.
 
 1. `git`, Python 3.11+, `venv` 확인
 2. 기존 `~/.dsp/config.env`와 Run 보존
@@ -48,15 +45,21 @@ Installer는 다음을 수행합니다.
 5. `pip install -e .`로 DSP 설치
 6. `dsp-menu.sh` 실행
 
+다른 경로를 사용하려면 Installer 실행 전에 `DSP_REPO_DIR`을 지정합니다.
+
+```bash
+export DSP_REPO_DIR=/opt/xdr-poc-script
+curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
+```
+
 ## Menu를 열지 않고 설치
 
 ```bash
-export DSP_REPO_DIR="$HOME/xdr-poc-script"
 export DSP_NO_LAUNCH=1
 curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
 ```
 
-나중에 다음으로 Menu를 실행할 수 있습니다.
+기본 경로 설치에서는 나중에 다음으로 Menu를 실행할 수 있습니다.
 
 ```bash
 $HOME/xdr-poc-script/dsp-menu.sh
@@ -64,14 +67,7 @@ $HOME/xdr-poc-script/dsp-menu.sh
 
 ## 기존 설치 업데이트
 
-가장 쉬운 방법은 Operator Menu의 **1 — Update latest patch**를 사용하는 것입니다.
-
-같은 `DSP_REPO_DIR`로 Bootstrap Installer를 다시 실행해도 됩니다.
-
-```bash
-export DSP_REPO_DIR="$HOME/xdr-poc-script"
-curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
-```
+가장 쉬운 방법은 Operator Menu의 **1 — Update latest patch**를 사용하는 것입니다. Bootstrap Installer를 다시 실행해도 기존 Repository를 Update하며 `~/.dsp/` 상태는 유지됩니다.
 
 <Warning>
 현재 제품 Script는 `release/v1.4.0-rc`를 사용합니다. 이전 `release/v1.4.0` Branch는 Retired Traffic Volume 동작 때문에 Installer/Menu에서 명시적으로 거부됩니다.
@@ -95,8 +91,8 @@ dsp plugins list
 | --- | --- |
 | `~/.dsp/config.env` | Operator 설정 |
 | `~/.dsp/runs/` | Run별 Artifact |
-| `$HOME/xdr-poc-script/.venv/` | 권장 경로 사용 시 Python Virtual Environment |
-| `$HOME/xdr-poc-script/dsp-menu.sh` | Operator Menu |
+| `$HOME/xdr-poc-script/.venv/` | 기본 경로의 Python Virtual Environment |
+| `$HOME/xdr-poc-script/dsp-menu.sh` | 기본 경로의 Operator Menu |
 
 <Card title="첫 테스트 실행" icon="rocket" href="/ko/quickstart">
   Webshell 설정 전에 Local Mode + Normal Profile로 먼저 동작을 확인하세요.

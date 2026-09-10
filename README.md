@@ -22,6 +22,6 @@ The navigation is task-oriented:
 
 DSP generates observable security activity and execution evidence. It does not automatically assert that a vendor alert fired, that an attack succeeded, or that an XDR case was correlated. Those outcomes require evidence from the connected XDR/NDR platform and human verification.
 
-## Public install guidance
+## Public install path
 
-The current bootstrap script contains a legacy default repository path. Public documentation therefore sets `DSP_REPO_DIR="$HOME/xdr-poc-script"` explicitly so installation works for normal user accounts without relying on an internal lab path.
+The bootstrap installer uses `$HOME/xdr-poc-script` by default, so the public Quick Start can be copied and run without a user-specific hard-coded path.
