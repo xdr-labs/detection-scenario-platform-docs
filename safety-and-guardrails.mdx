@@ -1,0 +1,97 @@
+---
+title: "Safety & Guardrails"
+description: "Use DSP only in authorized POC scopes and understand the built-in target and execution safeguards."
+---
+
+# Safety & Guardrails
+
+DSP is intended for **authorized labs and customer POCs**. It deliberately generates security-relevant network and host activity, so target scope and execution origin must be agreed before a run.
+
+## Operating principles
+
+1. Obtain explicit authorization for the target CIDR and test window.
+2. Start with `normal` unless broader host coverage is intentionally required.
+3. Review discovered services and customer constraints before running service-oriented scenarios.
+4. Treat webshell endpoints as privileged test infrastructure.
+5. Keep DSP execution evidence separate from claims about detection or compromise.
+
+## Large CIDR protection
+
+DSP blocks target networks wider than `/24` by default. To override this guardrail, both of the following are required:
+
+```bash
+--allow-large-target
+--max-hosts <N>
+```
+
+Example:
+
+```bash
+dsp run \
+  --profile high \
+  --target-net 10.0.0.0/16 \
+  --allow-large-target \
+  --max-hosts 10
+```
+
+This prevents accidental expansion across a large customer network.
+
+## `normal` vs `high`
+
+`high` does **not** increase the intended per-target volume relative to `normal`. It expands the same per-target scenario behavior to more discovered hosts/services.
+
+That distinction matters operationally: `high` can still create much more **aggregate** traffic because more hosts participate.
+
+## Dry run
+
+Advanced operators can use:
+
+```bash
+dsp run --dry-run --profile normal --target-net 10.10.10.0/24
+```
+
+Use dry-run mode when validating configuration or workflow without network activity.
+
+## Webshell risk
+
+Webshell mode executes commands on a remote host. Only use an endpoint specifically prepared and authorized for the POC.
+
+<Warning>
+The repository's fake JSP lab endpoint can execute arbitrary shell commands. It is for isolated testing only and must never be exposed to the public Internet.
+</Warning>
+
+## Avoid unsupported claims
+
+A DSP run can show that:
+
+- a scenario was scheduled
+- traffic/host activity was generated
+- structured events were recorded
+- DSP validation/reporting completed
+
+It cannot, by itself, show that:
+
+- an attack succeeded
+- a system was compromised
+- a vendor detection fired
+- an alert was correctly classified
+- an XDR case was correlated
+
+Those outcomes require separate evidence from the relevant security platform and human review.
+
+## Customer POC checklist
+
+Before execution, confirm:
+
+- authorized CIDR(s)
+- excluded production assets
+- allowed test window
+- allowed protocols/services
+- local or webshell execution origin
+- webshell host ownership and authorization
+- expected scenario profile
+- maximum host count
+- security monitoring team awareness
+- rollback/stop procedure
+
+After execution, preserve the DSP run directory and record the matching alert/case identifiers from the customer platform.
