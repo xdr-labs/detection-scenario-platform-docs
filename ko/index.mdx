@@ -1,60 +1,84 @@
 ---
 title: "Detection Scenario Platform"
-description: "현실적인 보안 활동을 생성하고 증거를 수집하여 XDR/NDR POC의 가치를 반복 가능하게 검증합니다."
+description: "반복 가능한 XDR/NDR 고객 POC 검증을 위해 현실적인 보안 활동과 Evidence를 생성합니다."
 ---
 
 # Detection Scenario Platform (DSP)
 
 **XDR 및 NDR 고객 POC 검증을 위한 현실적이고 관찰 가능한 보안 활동을 생성합니다.**
 
-DSP는 고객 환경에서 제품의 가치를 보여줄 만큼 의미 있는 Alert이나 Case가 충분하지 않을 때 사용할 수 있는 재사용 가능한 POC 플랫폼입니다. 대상 환경을 탐색하고, 안전한 탐지 지향 시나리오를 실행하며, 구조화된 이벤트를 기록하고, 엔지니어가 검토하여 고객 보고에 활용할 수 있는 증거를 생성합니다.
+DSP는 고객 환경이 너무 조용해 평가 기간 동안 충분한 Detection을 보여주기 어려울 때 사용할 수 있는 POC 도구입니다. 접근 가능한 대상을 확인하고, 통제된 Scenario를 실행하며, 실제로 어떤 Activity가 생성되었는지 기록하고, 그 결과를 XDR/NDR Detection과 비교할 수 있는 Evidence로 남깁니다.
 
 <Note>
-DSP는 **트래픽 및 이벤트 생성**을 검증합니다. 특정 보안 제품에서 Alert이 발생했거나 XDR Case가 성공적으로 Correlation되었다고 자동으로 판단하지 않습니다. Detection, Alert, Case 결과는 연결된 보안 플랫폼과 사람의 검증을 통해 확인해야 합니다.
+DSP가 증명하는 것은 **어떤 Activity를 생성했는가**입니다. 특정 Alert이 발생했거나 XDR Case가 성공적으로 Correlation되었다고 자동으로 판단하지 않습니다. Detection과 Case 결과는 연결된 보안 플랫폼에서 별도로 확인해야 합니다.
 </Note>
 
+## 가장 빠르게 사용하는 방법
+
+<Steps>
+  <Step title="DSP 설치">
+    Python 3.11+와 Git이 있는 Linux Host에서 다음을 실행합니다.
+
+    ```bash
+    export DSP_REPO_DIR="$HOME/xdr-poc-script"
+    curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
+    ```
+  </Step>
+  <Step title="첫 실행 설정">
+    Menu에서 **Configure environment**를 선택하고 승인된 Target CIDR을 입력한 뒤, Execution Mode는 **local**, Profile은 **normal**을 선택합니다.
+  </Step>
+  <Step title="실행 및 결과 확인">
+    **Run scenario**를 실행한 뒤 **Show latest report**에서 DSP가 생성한 결과를 확인합니다.
+  </Step>
+</Steps>
+
 <CardGroup cols={2}>
-  <Card title="설치 및 실행" icon="rocket" href="/ko/quickstart">
-    DSP를 설치하고 대상 네트워크를 설정한 뒤 Operator Menu에서 첫 시나리오를 실행합니다.
+  <Card title="5분 빠른 시작" icon="rocket" href="/ko/quickstart">
+    사전 조건 확인부터 첫 Report까지 가장 단순한 Local Mode 경로를 따라갑니다.
   </Card>
-  <Card title="POC 프로그램" icon="diagram-project" href="/ko/poc-program">
-    Discovery, Scenario Execution, Detection, Evidence, Case Demo가 어떻게 연결되는지 확인합니다.
+  <Card title="POC Workflow" icon="diagram-project" href="/ko/poc-program">
+    Target Discovery, 통제된 Activity, NDR/XDR Detection 확인, Evidence가 어떻게 연결되는지 확인합니다.
   </Card>
   <Card title="시나리오 범위" icon="radar" href="/ko/scenarios">
-    현재 Operational Profile에 포함된 Network, DNS, Web, Identity 및 Endpoint 시나리오를 확인합니다.
+    현재 Network, DNS, Web, Identity, Host Behavior Scenario를 확인합니다.
   </Card>
-  <Card title="3rd-Party Alert & Case Demo" icon="link" href="/ko/third-party-alert-case-demo">
-    3rd-Party Alert, NDR Detection, EDR Alert 등 여러 신호를 하나의 XDR Investigation 흐름으로 보여주는 방법을 확인합니다.
+  <Card title="XDR Correlation Demo" icon="link" href="/ko/third-party-alert-case-demo">
+    DSP Evidence, NDR Detection, 선택적인 External Alert을 하나의 XDR Investigation Story로 연결합니다.
   </Card>
 </CardGroup>
 
-## DSP가 필요한 이유
+## 준비할 것
 
-보안이 잘 구성되었거나 폐쇄된 고객 환경에서는 제한된 POC 기간 동안 의미 있는 Alert이 충분히 발생하지 않는 경우가 많습니다. 그 결과 깨끗한 네트워크에서는 보여줄 증거가 부족하고, 고객은 내부 보고를 위해 Screenshot과 Evidence가 필요하며, 일반적인 BAS 도구는 실제 XDR/NDR POC에서 보여주려는 Detection 및 Investigation Workflow와 정확히 맞지 않을 수 있습니다.
+가장 단순한 첫 실행에는 다음이 필요합니다.
 
-DSP는 이 운영상의 빈 공간을 해결합니다. **POC를 파괴적인 공격 훈련으로 만들지 않으면서 Detection 및 Investigation Workflow에 매핑할 수 있는 반복 가능하고 관찰 가능한 활동을 생성합니다.**
+- **Python 3.11+**와 `git`이 설치된 Linux Operator Host
+- 테스트가 허가된 **Target CIDR**
+- DSP Host에서 Target Network로의 Network Reachability
+- Detection 결과를 확인할 XDR/NDR Console 접근 권한
 
-## DSP가 제공하는 기능
+일반적인 DSP 실행에는 **XDR API Token이 필요하지 않습니다**. Webshell Mode는 Activity를 고객 네트워크 내부의 승인된 Host에서 발생시켜야 하는 경우에만 사용하면 됩니다.
+
+## DSP가 제공하는 것
 
 <CardGroup cols={2}>
+  <Card title="통제된 Scenario" icon="crosshairs">
+    Scan, DNS, Web, Identity, Protocol, Host Behavior Activity를 반복 가능하게 생성합니다.
+  </Card>
   <Card title="Discovery 기반 실행" icon="magnifying-glass">
-    Target CIDR에서 시작하여 DSP가 대상 Host/Service를 탐색하고 적합한 시나리오를 실행합니다.
+    CIDR에서 시작하여 발견된 Host/Service를 기준으로 Scenario를 실행합니다.
   </Card>
-  <Card title="Local + Webshell 실행" icon="terminal">
-    DSP Host에서 직접 실행하거나 내부 네트워크 POC를 위해 승인된 Remote Webshell Host에서 활동을 발생시킬 수 있습니다.
+  <Card title="Run 단위 Evidence" icon="file-lines">
+    Event, Traffic Summary, Validation Output, Report, Verification Template을 하나의 Run ID 아래에 보관합니다.
   </Card>
-  <Card title="구조화된 Evidence" icon="file-lines">
-    각 Run은 Append-only Event Store와 Report, Validation Output, Traffic Summary 및 Verification Template을 생성합니다.
-  </Card>
-  <Card title="간단한 Operational Profile" icon="sliders">
-    `normal`은 대표 대상에 실행하고, `high`는 동일한 대상별 활동을 더 많은 발견 대상에 확장합니다.
+  <Card title="단순한 Coverage Profile" icon="sliders">
+    `normal`은 대표 대상에 실행하고, `high`는 같은 대상별 Volume을 더 많은 발견 Host에 확장합니다.
   </Card>
 </CardGroup>
 
-## 현재 Release 상태
+## 현재 Validation 범위
 
 DSP v1.4.0은 **READY WITH KNOWN LIMITATIONS** 상태로 문서화되어 있습니다. Local Execution과 실제 JSP/PHP Webshell 실행은 검증되었습니다. ASPX/Windows IIS는 실제 Windows Webshell Runtime 검증이 완료되지 않아 Preview 상태입니다.
 
 <Card title="Validation 상태 확인" icon="circle-check" href="/ko/validation-status">
-  고객 POC에서 사용하기 전에 Provider, Platform 및 Webshell별 현재 검증 범위를 확인합니다.
+  고객 POC 전에 Provider와 Platform별 현재 검증 범위를 확인합니다.
 </Card>

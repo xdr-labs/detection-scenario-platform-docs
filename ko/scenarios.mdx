@@ -1,69 +1,65 @@
 ---
 title: "시나리오 범위"
-description: "XDR/NDR POC 검증을 위한 현재 DSP Network, DNS, Web, Identity 및 Endpoint 시나리오를 확인합니다."
+description: "XDR/NDR POC 검증을 위한 현재 DSP Network, DNS, Web, Identity, Protocol 및 Host Behavior Scenario를 확인합니다."
 ---
 
 # 시나리오 범위
 
-DSP는 `scenarios/<id>/` 아래의 Scenario Plugin을 사용합니다. 현재 Operational Profile 순서에는 고객 POC에서 사용할 수 있는 11개의 주요 Scenario가 포함되어 있습니다. Runtime은 추가 Internal/Test Plugin을 발견할 수 있으므로 특정 설치 환경에서의 최종 기준은 `dsp plugins list`입니다.
+DSP는 `scenarios/<id>/` 아래의 Scenario Plugin을 사용합니다. 현재 Operational Profile에는 고객 POC에서 사용할 수 있는 11개의 주요 Scenario가 포함되어 있습니다. Development Branch에는 추가 Internal/Test Plugin이 있을 수 있으므로 설치된 Build의 최종 기준은 `dsp plugins list`입니다.
 
 ## Operational Scenario Set
 
 | Scenario ID | Category | 생성하는 Activity | 일반적인 POC Signal |
 | --- | --- | --- | --- |
-| `host_behavior_check` | Endpoint / EDR | Endpoint Telemetry를 위한 통제된 Host-side File/Process Behavior | EDR / Host Behavior |
-| `port_sweep` | Network | 선택된 Host/Port에 대한 TCP Probe | Scan / Reconnaissance |
-| `http_followup` | HTTP / Web | 발견된 HTTP Service에 반복 Request 및 Attack-oriented Path 전송 | Web Scanning / Suspicious Request |
-| `sql_injection` | HTTP / Web | Time-based 및 `UNION SELECT` Pattern을 포함한 SQL Injection 형태의 Request | WAF / NDR Web Attack |
+| `host_behavior_check` | Host Behavior | Execution Host에서 통제된 File/Process Activity 생성 | Host-side Evidence / XDR Context |
+| `port_sweep` | Network | 선택된 Host/Port에 TCP Probe | Scan / Reconnaissance |
+| `http_followup` | HTTP / Web | 발견된 HTTP Service에 반복 Request와 Attack-oriented Path 전송 | Web Scanning / Suspicious Request |
+| `sql_injection` | HTTP / Web | Time-based, `UNION SELECT` 등을 포함한 SQL Injection 형태 Request | NDR/Web Attack Visibility |
 | `ssh_failure` | Identity / SSH | 반복적인 SSH Authentication Failure | SSH Brute-force / Auth Failure |
-| `ldap_enumeration` | Identity / LDAP | LDAP 접근이 가능한 경우 Bind/Query Enumeration 형태 Activity | Directory Enumeration |
-| `smb_login_failure` | Identity / SMB | 반복적인 SMB Authentication Failure | SMB Bad-auth / Brute-force Signal |
+| `ldap_enumeration` | Identity / LDAP | LDAP 접근 시 Bind/Query Enumeration 형태 Activity | Directory Enumeration |
+| `smb_login_failure` | Identity / SMB | 반복적인 SMB Authentication Failure | SMB Bad-auth Signal |
 | `kerberos_failure` | Identity / Kerberos | 발견된 Service에 Kerberos Failure Attempt | Identity / Pre-auth Failure |
 | `dga` | DNS | Algorithmically Generated Domain Activity | DGA / DNS Anomaly |
-| `rare_protocol_activity` | Network Behavior | 설정된 Burst Behavior를 포함한 낮은 빈도 또는 비정상 Protocol Activity | Rare Protocol / Anomaly |
-| `dns_tunnel` | DNS / Exfil-style | 구조화된 DNS Query Payload Activity | DNS Tunneling / Exfil-style Detection |
+| `rare_protocol_activity` | Network Behavior | 낮은 빈도 또는 비정상 Protocol Activity | Rare Protocol / Anomaly |
+| `dns_tunnel` | DNS | 구조화된 DNS Query Payload Activity | DNS Tunneling / Exfil-style Visibility |
 
 <Note>
-이 표는 **DSP가 생성하는 Activity와 해당 Activity가 자극하도록 설계된 Signal 유형**을 설명합니다. 특정 Vendor가 반드시 Alert을 생성한다는 의미는 아닙니다.
+이 항목들은 **DSP가 생성하는 Activity와 목표 Signal 유형**을 설명합니다. 특정 XDR/NDR 제품에서 반드시 Alert이 발생한다는 의미는 아닙니다. 실제 결과는 Sensor Visibility, Policy, Rule/Model, 고객 환경에 따라 달라집니다.
 </Note>
 
-## 고객 POC 관점의 Scenario 분류
+## POC에서 Scenario 선택 방법
 
-POC에서는 Scenario를 다음과 같이 더 단순한 Story로 설명할 수 있습니다.
+대부분의 POC에서는 `normal` Profile로 시작하고 DSP가 전체 Active Scenario 순서를 사용하도록 두는 것이 가장 쉽습니다. DNS Tunnel이나 Web Attack Visibility처럼 목적이 명확할 때만 특정 Scenario를 직접 선택하는 것을 권장합니다.
 
-### HTTP / Web
+### Network / Discovery
 
-- URL Scanning 및 HTTP Follow-up
-- Attack-oriented Web Path
-- SQL Injection Attempt
-- 필요한 경우 Non-standard Port HTTP Burst Activity
+- `port_sweep`
+- `rare_protocol_activity`
 
-### SSH
+### DNS
 
-- 발견된 SSH Service에 반복 Login Failure
+- `dga`
+- `dns_tunnel`
 
-### SMB / LDAP / Kerberos
+### Web
 
-- 해당 Service가 존재할 때 Authentication Failure 및 Enumeration 형태 Activity
+- `http_followup`
+- `sql_injection`
 
-### Network Behavior
+### Identity / Service Behavior
 
-- Port Sweep
-- Rare Protocol Activity
-- DNS Tunnel
-- DGA 형태 DNS Behavior
+- `ssh_failure`
+- `ldap_enumeration`
+- `smb_login_failure`
+- `kerberos_failure`
 
-### Endpoint / EDR
+### Host Behavior
 
-- `host_behavior_check`는 Endpoint Telemetry 및 Evidence 확인을 위한 통제된 Host Activity를 생성합니다.
-
-### Webshell 기반 내부 확장
-
-검증된 JSP/PHP Webshell Provider를 사용하면 동일한 Scenario Framework가 Remote Host에서 Internal Scan, Discovery, Service-specific Traffic, DNS Activity 및 Host Behavior를 발생시킬 수 있습니다.
+- `host_behavior_check`는 XDR 환경에서 Host Telemetry를 수집하는 경우 추가 Context로 활용할 수 있는 통제된 Host-side Activity를 생성합니다.
 
 ## Profile 동작
 
-현재 두 Profile은 동일한 순서의 Scenario Set을 실행합니다.
+현재 두 Profile은 동일한 순서의 Scenario Set을 사용합니다.
 
 ```text
 host_behavior_check → port_sweep → http_followup → sql_injection
@@ -73,14 +69,12 @@ host_behavior_check → port_sweep → http_followup → sql_injection
 
 차이는 Target Coverage입니다.
 
-- `normal` — 제한된 대표 대상, Service-oriented Scenario는 일반적으로 최대 2개 대상
-- `high` — 대상별 Volume은 동일하며 Guardrail 범위에서 발견된 모든 대상으로 확장
+- `normal` — 대표 대상, Service-oriented Scenario는 일반적으로 최대 2개 대상
+- `high` — 대상별 Volume은 동일하고 Guardrail 범위에서 더 많은 발견 Target으로 확장
 
-DNS Tunnel은 현재 Traffic Profile에서 별도의 Host Selection Contract를 사용하며 DGA Resolver Behavior도 Scenario별로 처리됩니다.
+Service-specific Scenario는 해당 Host/Service가 실제 Target 환경에서 Reachable한 경우에 의미가 있습니다.
 
-## 특정 Scenario만 실행하는 예시
-
-Advanced Operator는 전체 Profile 대신 일부 Scenario만 실행할 수 있습니다.
+## 특정 Scenario만 실행
 
 ```bash
 dsp run \
@@ -89,12 +83,10 @@ dsp run \
   --target-net 10.10.10.0/24
 ```
 
-## Plugin Discovery
+예시 CIDR은 실제 승인된 Scope로 바꾸세요.
 
-설치된 버전에서 Active Registry를 확인하려면 다음을 실행합니다.
+## Active Plugin 확인
 
 ```bash
 dsp plugins list
 ```
-
-Development Branch에 추가 Scenario가 있거나 Validation/Load 상태 때문에 Plugin이 Disabled된 경우 이를 확인하는 데 유용합니다.

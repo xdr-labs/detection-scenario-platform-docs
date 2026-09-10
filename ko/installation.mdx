@@ -1,93 +1,103 @@
 ---
 title: "설치"
-description: "지원되는 Bootstrap Workflow를 사용하여 DSP를 설치하거나 업데이트합니다."
+description: "Python 3.11 이상을 사용하는 Linux Operator Host에 DSP를 설치하거나 업데이트합니다."
 ---
 
 # 설치
 
+[빠른 시작](/ko/quickstart)의 사전 조건 확인에서 문제가 있거나 설치 경로와 실행 방식을 직접 제어해야 할 때 이 페이지를 사용하세요.
+
 ## 요구사항
 
-DSP는 Python 3.11+와 몇 가지 표준 시스템 도구가 필요합니다.
+현재 Package는 **Python 3.11+**를 요구합니다. Bootstrap Installer는 `git`과 Python `venv` 지원도 필요합니다. `whiptail`은 필수는 아니지만 Menu UI를 위해 권장합니다.
+
+환경을 확인합니다.
+
+```bash
+python3 --version
+python3 -c 'import venv; print("venv: OK")'
+git --version
+```
+
+<Warning>
+`python3`가 3.11보다 낮다면 사용 중인 Linux Distribution에 맞는 Python 3.11+ Runtime을 먼저 설치하세요. Bootstrap Installer는 오래된 Python으로 Virtual Environment를 생성하지 않고 중단하도록 설계되어 있습니다.
+</Warning>
+
+기본 `python3`가 이미 3.11 이상인 Debian/Ubuntu 계열에서는 일반적으로 다음 Package를 준비하면 됩니다.
 
 ```bash
 sudo apt update
-sudo apt install -y git python3 python3-venv python3-pip whiptail
+sudo apt install -y git python3 python3-venv whiptail
 ```
 
-`whiptail`은 선택 사항입니다. 설치되어 있지 않으면 Operator Menu가 일반 번호 선택형 Terminal Interface로 동작합니다.
+## 권장 공개 설치 방법
 
-## 권장 One-Command 설치
+현재 Bootstrap Script는 `DSP_REPO_DIR`을 지원합니다. 과거 Lab 기본 경로에 의존하지 않도록 공개 문서에서는 설치 경로를 명시적으로 지정합니다.
 
 ```bash
+export DSP_REPO_DIR="$HOME/xdr-poc-script"
 curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
 ```
 
-Bootstrap Script는 다음 작업을 수행합니다.
+Installer는 다음을 수행합니다.
 
-1. `git`, `python3`, Python `venv`, `pip`/`ensurepip`을 확인합니다.
-2. 기존 `~/.dsp/config.env`를 덮어쓰지 않고 `~/.dsp/`가 존재하도록 준비합니다.
-3. Operator Release Branch를 Clone 또는 Update합니다.
-4. 필요한 경우 `.venv`를 생성합니다.
-5. `pip install -e .`로 DSP를 설치합니다.
-6. `dsp-menu.sh`에 실행 권한을 설정합니다.
-7. `DSP_NO_LAUNCH=1`이 아닌 경우 Menu를 엽니다.
-
-Installer는 `~/.dsp/runs/` 아래의 기존 Run Artifact를 삭제하지 않습니다.
+1. `git`, Python 3.11+, `venv` 확인
+2. 기존 `~/.dsp/config.env`와 Run 보존
+3. 현재 Operator Branch Clone/Update
+4. `.venv` 생성 또는 재사용
+5. `pip install -e .`로 DSP 설치
+6. `dsp-menu.sh` 실행
 
 ## Menu를 열지 않고 설치
 
 ```bash
-DSP_NO_LAUNCH=1 bash install-dsp.sh
-```
-
-Automation, Smoke Test 또는 통제된 설치 절차에서 유용합니다.
-
-## 설치 디렉터리 변경
-
-```bash
-DSP_REPO_DIR=/opt/xdr-poc-script bash install-dsp.sh
-```
-
-현재 Source Installer에서 `DSP_REPO_DIR`을 지정하지 않으면 기본값은 `/home/aella/xdr-poc-script`입니다.
-
-## 기존 설치 업데이트
-
-동일한 Bootstrap Command를 다시 실행할 수 있습니다. Installer는 반복 실행이 가능하도록 설계되어 있습니다.
-
-```bash
+export DSP_REPO_DIR="$HOME/xdr-poc-script"
+export DSP_NO_LAUNCH=1
 curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
 ```
 
-또는 Operator Menu에서 **Update latest patch**를 선택합니다.
-
-<Warning>
-Retired 상태인 `release/v1.4.0` Branch를 강제로 사용하지 마십시오. 현재 Menu는 해당 Branch에 오래된 Traffic Volume 동작이 포함되어 있기 때문에 이를 명시적으로 거부하고 `release/v1.4.0-rc` 사용을 안내합니다.
-</Warning>
-
-## 설치 확인
+나중에 다음으로 Menu를 실행할 수 있습니다.
 
 ```bash
-cd /path/to/xdr-poc-script
+$HOME/xdr-poc-script/dsp-menu.sh
+```
+
+## 기존 설치 업데이트
+
+가장 쉬운 방법은 Operator Menu의 **1 — Update latest patch**를 사용하는 것입니다.
+
+같은 `DSP_REPO_DIR`로 Bootstrap Installer를 다시 실행해도 됩니다.
+
+```bash
+export DSP_REPO_DIR="$HOME/xdr-poc-script"
+curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
+```
+
+<Warning>
+현재 제품 Script는 `release/v1.4.0-rc`를 사용합니다. 이전 `release/v1.4.0` Branch는 Retired Traffic Volume 동작 때문에 Installer/Menu에서 명시적으로 거부됩니다.
+</Warning>
+
+## 설치 검증
+
+```bash
+cd "$HOME/xdr-poc-script"
 source .venv/bin/activate
 
 dsp --version
 dsp plugins list
 ```
 
-Package는 두 개의 Console Entry Point를 제공합니다.
-
-- `dsp` — 기본 Operator CLI
-- `dsp-remote-scenario` — Webshell Execution Path에서 사용하는 Remote Scenario Runner
+현재 Operator Branch에서 예상되는 Product Version은 `dsp 1.4.0`입니다.
 
 ## 주요 경로
 
 | 경로 | 용도 |
 | --- | --- |
-| `~/.dsp/config.env` | Operator Configuration |
+| `~/.dsp/config.env` | Operator 설정 |
 | `~/.dsp/runs/` | Run별 Artifact |
-| `<repo>/.venv/` | Python Virtual Environment |
-| `<repo>/dsp-menu.sh` | Operator Menu |
+| `$HOME/xdr-poc-script/.venv/` | 권장 경로 사용 시 Python Virtual Environment |
+| `$HOME/xdr-poc-script/dsp-menu.sh` | Operator Menu |
 
-<Card title="DSP 설정" icon="sliders" href="/ko/configuration">
-  Target CIDR, Execution Provider, Profile 및 선택적인 Webshell 설정을 구성합니다.
+<Card title="첫 테스트 실행" icon="rocket" href="/ko/quickstart">
+  Webshell 설정 전에 Local Mode + Normal Profile로 먼저 동작을 확인하세요.
 </Card>
