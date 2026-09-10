@@ -1,0 +1,100 @@
+---
+title: "Scenario Coverage"
+description: "Current DSP scenarios for network, DNS, web, identity, and endpoint-oriented POC validation."
+---
+
+# Scenario Coverage
+
+DSP uses scenario plugins under `scenarios/<id>/`. The current operational profile order contains eleven customer-facing scenarios. The runtime may discover additional internal/test plugins, so `dsp plugins list` is the authoritative view for a specific installation.
+
+## Operational scenario set
+
+| Scenario ID | Category | What it generates | Typical POC signal |
+| --- | --- | --- | --- |
+| `host_behavior_check` | Endpoint / EDR | Controlled host-side file/process behavior for endpoint telemetry | EDR / host behavior |
+| `port_sweep` | Network | TCP probing across selected hosts/ports | Scan / reconnaissance |
+| `http_followup` | HTTP / Web | Repeated requests and attack-oriented paths against discovered HTTP services | Web scanning / suspicious requests |
+| `sql_injection` | HTTP / Web | SQL-injection-style request patterns, including time-based and `UNION SELECT` signatures | WAF / NDR web attack |
+| `ssh_failure` | Identity / SSH | Repeated failed SSH authentication behavior | SSH brute-force / auth failure |
+| `ldap_enumeration` | Identity / LDAP | LDAP bind/query enumeration-style activity where LDAP is reachable | Directory enumeration |
+| `smb_login_failure` | Identity / SMB | Repeated SMB authentication failures | SMB bad-auth / brute-force signal |
+| `kerberos_failure` | Identity / Kerberos | Kerberos failure attempts against discovered services | Identity / pre-auth failure |
+| `dga` | DNS | Algorithmically generated domain activity | DGA / DNS anomaly |
+| `rare_protocol_activity` | Network behavior | Low-frequency or unusual protocol activity, including configured burst behavior | Rare protocol / anomaly |
+| `dns_tunnel` | DNS / Exfil-style | Structured DNS query payload activity | DNS tunneling / exfil-style detection |
+
+<Note>
+The table describes the **activity DSP generates and the type of signal it is intended to exercise**. It does not guarantee that any specific vendor will create an alert.
+</Note>
+
+## Customer-facing coverage story
+
+The POC program groups these scenarios into a simpler narrative:
+
+### HTTP / Web
+
+- URL scanning and HTTP follow-up
+- attack-oriented web paths
+- SQL injection attempts
+- non-standard-port HTTP burst behavior where applicable
+
+### SSH
+
+- repeated login failures against discovered SSH services
+
+### SMB / LDAP / Kerberos
+
+- authentication failure and enumeration-style activity when those services are available
+
+### Network behavior
+
+- port sweep
+- rare protocol activity
+- DNS tunnel
+- DGA-style DNS behavior
+
+### Endpoint / EDR
+
+- `host_behavior_check` creates controlled host activity suitable for endpoint telemetry and evidence review
+
+### Webshell-focused internal expansion
+
+When using a validated JSP/PHP webshell provider, the same scenario framework can originate internal scanning, discovery, service-specific traffic, DNS activity, and host behavior from the remote host.
+
+## Profile behavior
+
+Both current profiles run the same ordered scenario set:
+
+```text
+host_behavior_check → port_sweep → http_followup → sql_injection
+→ ssh_failure → ldap_enumeration → smb_login_failure
+→ kerberos_failure → dga → rare_protocol_activity → dns_tunnel
+```
+
+The difference is target coverage:
+
+- `normal` — limited representative targets, generally up to two for service-oriented scenarios
+- `high` — same per-target volume, expanded to all discovered targets subject to guardrails
+
+DNS Tunnel has its own host-selection contract in the current traffic profile, and DGA resolver behavior is also scenario-specific.
+
+## Example explicit scenario run
+
+Advanced operators can run a subset instead of the full profile:
+
+```bash
+dsp run \
+  --scenarios port_sweep,http_followup,dns_tunnel \
+  --profile normal \
+  --target-net 10.10.10.0/24
+```
+
+## Plugin discovery
+
+See the active registry on the installed version:
+
+```bash
+dsp plugins list
+```
+
+This is useful when development branches contain additional scenarios or when a plugin has been disabled due to validation or load status.
