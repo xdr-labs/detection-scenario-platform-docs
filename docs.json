@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Detection Scenario Platform",
-  "description": "Documentation for Detection Scenario Platform (DSP) — realistic security traffic generation, evidence collection, and XDR/NDR/EDR POC validation.",
+  "description": "Documentation for Detection Scenario Platform (DSP) — realistic security traffic generation, evidence collection, and XDR/NDR POC validation.",
   "colors": {
     "primary": "#16A34A"
   },
