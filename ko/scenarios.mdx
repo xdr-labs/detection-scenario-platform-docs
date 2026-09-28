@@ -1,17 +1,17 @@
 ---
 title: "시나리오 범위"
-description: "XDR/NDR POC 검증을 위한 현재 DSP Network, DNS, Web, Identity, Protocol 및 Host Behavior Scenario를 확인합니다."
+description: "XDR/NDR POC 검증에 사용할 네트워크, DNS, 웹, Identity, 프로토콜, 호스트 동작 시나리오를 설명합니다."
 ---
 
 # 시나리오 범위
 
-DSP는 `scenarios/<id>/` 아래의 Scenario Plugin을 사용합니다. 현재 Operational Profile에는 고객 POC에서 사용할 수 있는 11개의 주요 Scenario가 포함되어 있습니다. Development Branch에는 추가 Internal/Test Plugin이 있을 수 있으므로 설치된 Build의 최종 기준은 `dsp plugins list`입니다.
+DSP는 `scenarios/<id>/` 아래의 시나리오 Plugin을 사용합니다. 현재 기본 프로필에는 고객 POC에서 사용할 수 있는 11개 주요 시나리오가 포함되어 있습니다. 개발 브랜치에는 내부 테스트용 Plugin이 더 있을 수 있으므로 설치된 버전의 실제 목록은 `dsp plugins list`로 확인하십시오.
 
 ## Operational Scenario Set
 
-| Scenario ID | Category | 생성하는 Activity | 일반적인 POC Signal |
+| 시나리오 ID | 분류 | 생성하는 활동 | 일반적인 POC 신호 |
 | --- | --- | --- | --- |
-| `host_behavior_check` | Host Behavior | Execution Host에서 통제된 File/Process Activity 생성 | Host-side Evidence / XDR Context |
+| `host_behavior_check` | 호스트 동작 | 실행 호스트에서 통제된 파일/프로세스 활동 생성 | 호스트 측 기록 / XDR 참고 정보 |
 | `port_sweep` | Network | 선택된 Host/Port에 TCP Probe | Scan / Reconnaissance |
 | `http_followup` | HTTP / Web | 발견된 HTTP Service에 반복 Request와 Attack-oriented Path 전송 | Web Scanning / Suspicious Request |
 | `sql_injection` | HTTP / Web | Time-based, `UNION SELECT` 등을 포함한 SQL Injection 형태 Request | NDR/Web Attack Visibility |
@@ -20,16 +20,16 @@ DSP는 `scenarios/<id>/` 아래의 Scenario Plugin을 사용합니다. 현재 Op
 | `smb_login_failure` | Identity / SMB | 반복적인 SMB Authentication Failure | SMB Bad-auth Signal |
 | `kerberos_failure` | Identity / Kerberos | 발견된 Service에 Kerberos Failure Attempt | Identity / Pre-auth Failure |
 | `dga` | DNS | Algorithmically Generated Domain Activity | DGA / DNS Anomaly |
-| `rare_protocol_activity` | Network Behavior | 낮은 빈도 또는 비정상 Protocol Activity | Rare Protocol / Anomaly |
-| `dns_tunnel` | DNS | 구조화된 DNS Query Payload Activity | DNS Tunneling / Exfil-style Visibility |
+| `rare_protocol_activity` | 네트워크 동작 | 낮은 빈도 또는 비정상 Protocol Activity | Rare Protocol / Anomaly |
+| `dns_tunnel` | DNS | 구조화된 DNS Query payload 활동 | DNS Tunneling / Exfil-style Visibility |
 
 <Note>
-이 항목들은 **DSP가 생성하는 Activity와 목표 Signal 유형**을 설명합니다. 특정 XDR/NDR 제품에서 반드시 Alert이 발생한다는 의미는 아닙니다. 실제 결과는 Sensor Visibility, Policy, Rule/Model, 고객 환경에 따라 달라집니다.
+이 항목들은 **DSP가 생성하는 활동과 확인하려는 신호 유형**을 설명합니다. 특정 XDR/NDR 제품에서 반드시 Alert이 발생한다는 의미는 아닙니다. 실제 결과는 Sensor Visibility, Policy, Rule/Model, 고객 환경에 따라 달라집니다.
 </Note>
 
-## POC에서 Scenario 선택 방법
+## POC에서 시나리오 선택 방법
 
-대부분의 POC에서는 `normal` Profile로 시작하고 DSP가 전체 Active Scenario 순서를 사용하도록 두는 것이 가장 쉽습니다. DNS Tunnel이나 Web Attack Visibility처럼 목적이 명확할 때만 특정 Scenario를 직접 선택하는 것을 권장합니다.
+대부분의 POC에서는 `normal` 프로필로 시작하고 DSP가 활성 시나리오 전체를 순서대로 실행하도록 두는 것이 가장 쉽습니다. DNS Tunnel이나 Web Attack Visibility처럼 목적이 명확할 때만 특정 시나리오를 직접 선택하는 것을 권장합니다.
 
 ### Network / Discovery
 
@@ -53,13 +53,13 @@ DSP는 `scenarios/<id>/` 아래의 Scenario Plugin을 사용합니다. 현재 Op
 - `smb_login_failure`
 - `kerberos_failure`
 
-### Host Behavior
+### 호스트 동작
 
-- `host_behavior_check`는 XDR 환경에서 Host Telemetry를 수집하는 경우 추가 Context로 활용할 수 있는 통제된 Host-side Activity를 생성합니다.
+- `host_behavior_check`는 XDR 환경에서 호스트 텔레메트리를 수집하는 경우 추가 참고 정보로 활용할 수 있는 통제된 Host-side Activity를 생성합니다.
 
 ## Profile 동작
 
-현재 두 Profile은 동일한 순서의 Scenario Set을 사용합니다.
+현재 두 Profile은 동일한 시나리오 순서을 사용합니다.
 
 ```text
 host_behavior_check → port_sweep → http_followup → sql_injection
@@ -67,10 +67,10 @@ host_behavior_check → port_sweep → http_followup → sql_injection
 → kerberos_failure → dga → rare_protocol_activity → dns_tunnel
 ```
 
-차이는 Target Coverage입니다.
+차이는 대상 범위입니다.
 
 - `normal` — 대표 대상, Service-oriented Scenario는 일반적으로 최대 2개 대상
-- `high` — 대상별 Volume은 동일하고 Guardrail 범위에서 더 많은 발견 Target으로 확장
+- `high` — 대상별 Volume은 동일하고 Guardrail 범위에서 더 많은 발견 대상으로 확장
 
 Service-specific Scenario는 해당 Host/Service가 실제 Target 환경에서 Reachable한 경우에 의미가 있습니다.
 
