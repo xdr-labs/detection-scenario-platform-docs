@@ -97,15 +97,15 @@ Additional artifacts such as `events.db`, `events.jsonl`, and `validation.json` 
 
 ## What counts as success?
 
-A successful DSP run means the **activity-generation and evidence pipeline** worked. It does not guarantee that the XDR/NDR product generated an alert.
+A successful DSP run means DSP generated the activity and recorded the run correctly. It does not guarantee that the XDR/NDR product generated an alert.
 
-For the customer POC, verify the same time window, source/destination hosts, and scenario type in the XDR/NDR console, then record the matching alert or case identifiers in the evidence templates.
+For the customer POC, check the same time window, source/destination hosts, and scenario type in the XDR/NDR console, then record the matching alert or case identifiers in the verification templates.
 
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="POC workflow" icon="diagram-project" href="/poc-program">Turn a DSP run into a repeatable customer validation process.</Card>
+  <Card title="POC process" icon="diagram-project" href="/poc-program">Turn a DSP run into a repeatable customer validation process.</Card>
   <Card title="Scenario coverage" icon="radar" href="/scenarios">See which activity types the current profile can generate.</Card>
   <Card title="Webshell mode" icon="terminal" href="/execution-modes">Use an authorized internal host as the execution origin when needed.</Card>
-  <Card title="Reports & evidence" icon="file-lines" href="/reports-and-evidence">Understand the run artifacts and evidence chain.</Card>
+  <Card title="Reports & verification records" icon="file-lines" href="/reports-and-evidence">See what DSP records for each run and what to capture from the security platform.</Card>
 </CardGroup>
