@@ -15,7 +15,7 @@ Use local mode when the DSP host itself can reach the authorized target network.
 dsp run --profile normal --target-net 10.10.10.0/24
 ```
 
-Local execution flows through `LocalExecutionProvider` and the standard `RunManager`, then writes events, validation results, reports, and evidence packages to the local run directory.
+Local execution uses `LocalExecutionProvider` and `RunManager`, then writes events, validation results, reports, and verification files to the local run directory.
 
 ```mermaid
 flowchart LR
@@ -40,7 +40,7 @@ dsp run \
   --remote-work-dir /tmp/dsp
 ```
 
-DSP dispatches scenario execution to the remote host, retrieves the resulting `events.jsonl` bundle, imports those events into the local Event Store, and continues through the same validation/report/evidence pipeline.
+DSP dispatches scenario execution to the remote host, retrieves the resulting `events.jsonl` bundle, imports those events into the local Event Store, and continues through the same validation and reporting process.
 
 ```mermaid
 flowchart LR
@@ -61,7 +61,7 @@ flowchart LR
 | ASPX | Windows / IIS | **Preview** | HTTP contract exists, but real Windows IIS execution is not yet validated |
 
 <Warning>
-Do not describe ASPX as production-ready. The current release documentation explicitly lists the Windows/IIS webshell path as unvalidated and Linux-oriented bundle handling as a known limitation.
+Do not describe ASPX as production-ready. The current release documentation lists the Windows/IIS webshell path as unvalidated and notes that the validated bundle-handling path is Linux-oriented.
 </Warning>
 
 ## Webshell configuration
