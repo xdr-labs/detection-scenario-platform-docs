@@ -1,13 +1,13 @@
 ---
 title: "Customer POC Workflow"
-description: "A practical DSP workflow for generating activity, reviewing XDR/NDR detections, and preserving customer evidence."
+description: "A practical DSP process for generating activity, reviewing XDR/NDR detections, and recording customer POC results."
 ---
 
-# Customer POC Workflow
+# Customer POC Process
 
 DSP is designed for a common evaluation problem: a healthy or isolated customer network may be too quiet to produce enough useful detections during a short POC window.
 
-The goal is not to build another attack framework. The goal is to make **XDR/NDR detection and investigation value visible, repeatable, and reportable** using controlled activity.
+The goal is not to build another attack framework. The goal is to use controlled activity so customers can see and repeat the XDR/NDR detection and investigation process.
 
 ## Recommended POC flow
 
@@ -21,17 +21,17 @@ flowchart LR
     F --> G[XDR case demo if applicable]
 ```
 
-A practical customer workflow is:
+A practical customer sequence is:
 
 1. Agree on the authorized CIDR, exclusions, and test window.
 2. Start with `local` + `normal` unless an internal execution origin is required.
-3. Run DSP and confirm its own execution evidence.
+3. Run DSP and confirm what it actually generated.
 4. Review the same time window and hosts in the XDR/NDR console.
 5. Record matching detection IDs, screenshots, and notes.
-6. If the XDR platform correlates related signals, include the case timeline as customer evidence.
+6. If the XDR platform correlates related signals, include the case timeline in the POC results.
 
 <Note>
-`dsp run` performs target expansion, discovery/prefetch, scenario ordering, execution, Event Store recording, validation, reporting, and evidence generation as one operational flow. The diagram above is the customer POC model, not a list of separate CLI commands.
+`dsp run` handles target expansion, discovery/prefetch, scenario ordering, execution, Event Store recording, validation, and reporting in one run. The diagram above shows the customer POC sequence; it is not a list of separate CLI commands.
 </Note>
 
 ## The three decisions most operators make
@@ -50,19 +50,19 @@ Use a validated JSP/PHP webshell provider when the POC needs activity to origina
 
 ASPX/Windows IIS remains preview in the current release.
 
-## Separate three kinds of evidence
+## Separate three kinds of results
 
-| Layer | Question | Evidence |
+| Layer | Question | What to record |
 | --- | --- | --- |
 | DSP execution | Did DSP generate the intended activity? | `traffic_summary.json`, Event Store, `report.md` |
 | Detection | Did XDR/NDR detect or expose the activity? | Detection/alert ID, timestamp, affected hosts |
-| Investigation | Did the signals become a useful XDR case/story? | Case ID, timeline, screenshots, analyst notes |
+| Investigation | Did the signals become a useful XDR case? | Case ID, timeline, screenshots, analyst notes |
 
 Keeping these layers separate prevents the POC report from overstating what DSP itself proves.
 
 <CardGroup cols={2}>
   <Card title="Scenario coverage" icon="radar" href="/scenarios">Choose the activity types that best fit the POC objective.</Card>
   <Card title="XDR correlation demo" icon="link" href="/xdr-correlation-demo">Use NDR detections and optional external alerts in one XDR investigation story.</Card>
-  <Card title="Reports & evidence" icon="file-lines" href="/reports-and-evidence">Build an auditable chain from DSP run to customer proof.</Card>
+  <Card title="Reports & evidence" icon="file-lines" href="/reports-and-evidence">Keep a traceable record from the DSP run through the customer result.</Card>
   <Card title="Safety & guardrails" icon="shield" href="/safety-and-guardrails">Confirm scope, host caps, and execution origin before running.</Card>
 </CardGroup>
