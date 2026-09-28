@@ -1,11 +1,11 @@
 ---
 title: "Architecture"
-description: "Operator CLI부터 Discovery, Execution, Event Store, Validation, Reporting 및 Evidence까지 DSP의 상위 수준 Architecture를 설명합니다."
+description: "운영 CLI부터 대상 탐색, 실행, Event Store, 검증, 보고까지 DSP의 전체 구조를 설명합니다."
 ---
 
 # Architecture
 
-DSP는 고객 POC에서 Evidence Boundary를 명확하게 유지할 수 있도록 **Activity Generation**, **Event Recording**, **Validation/Reporting**, **Security-platform Confirmation**을 분리합니다.
+DSP는 고객 POC에서 무엇을 실행했고 무엇을 보안 플랫폼에서 확인했는지 구분할 수 있도록 **활동 생성**, **이벤트 기록**, **검증/보고**, **보안 플랫폼 확인** 단계를 나눕니다.
 
 ## 전체 흐름
 
@@ -37,15 +37,15 @@ flowchart TD
 - `dsp-menu.sh` — 가능한 경우 `whiptail`을 사용하는 SSH-friendly Operator Menu
 - `dsp` — Advanced 또는 Automated Operation을 위한 기본 CLI
 
-Menu는 일반적인 Workflow를 Target Network, Execution Mode 및 Coverage Profile 선택으로 단순화합니다.
+메뉴에서는 일반적인 작업을 대상 네트워크, 실행 방식, 실행 범위 프로필 세 가지 선택으로 단순화합니다.
 
 ## RunManager
 
-`RunManager`는 Run Lifecycle을 Orchestration합니다. CLI가 Profile 또는 Explicit Scenario List를 결정하고 Target Scope를 검증하며 Execution Provider를 선택하고 Progress를 출력한 뒤 실제 Scenario Execution을 Manager에 전달합니다.
+`RunManager`는 실행 전체 과정을 조정합니다. CLI가 프로필 또는 명시적 시나리오 목록을 결정하고 대상 범위를 검증한 뒤 실행 Provider를 선택하고 진행 상황을 표시합니다.
 
 ## Operational Profile
 
-현재 Profile 기반 Run은 다음 순서의 Scenario Plan을 사용합니다.
+현재 프로필 기반 실행은 다음 순서로 시나리오를 수행합니다.
 
 ```text
 host_behavior_check
@@ -61,13 +61,13 @@ rare_protocol_activity
 dns_tunnel
 ```
 
-Runtime은 이 목록을 Active Plugin과 비교하여 실제 실행 가능한 Scenario만 사용합니다.
+런타임은 이 목록을 활성 Plugin과 비교해 실제 실행 가능한 시나리오만 사용합니다.
 
 ## Scenario Plugin Model
 
 Scenario Code는 일반적으로 Manifest와 Python Implementation을 포함하는 `scenarios/<id>/` 아래에 분리되어 있습니다. Plugin Loader가 Scenario를 발견하고 Run Planner에 Active ID를 제공합니다.
 
-이 구조를 사용하면 Operator Interface를 수많은 Low-level Switch로 복잡하게 만들지 않고도 Scenario Coverage를 확장할 수 있습니다.
+이 구조를 사용하면 운영 화면에 수많은 저수준 옵션을 추가하지 않고도 시나리오 범위를 확장할 수 있습니다.
 
 ## Local Provider
 
@@ -79,9 +79,9 @@ Webshell Provider는 승인된 Remote Host로 Execution을 전달합니다. Remo
 
 Release에서 실제 검증된 Remote Path는 JSP/Tomcat과 PHP/Apache입니다. ASPX/IIS는 Preview 상태입니다.
 
-## Source of Truth로서의 Event Store
+## 실행 기록의 기준이 되는 Event Store
 
-Release 1.0 Architecture는 SQLite `events.db`를 Run의 Append-only Source of Truth로 사용합니다. Portable JSONL은 Export 및 Remote Event Transfer에 사용됩니다.
+Release 1.0에서는 SQLite `events.db`를 실행 기록의 기준으로 사용합니다. Portable JSONL은 내보내기와 원격 이벤트 전송에 사용됩니다.
 
 Event Store의 Data는 다음 기능에서 사용됩니다.
 
@@ -92,9 +92,9 @@ Event Store의 Data는 다음 기능에서 사용됩니다.
 
 이를 통해 Report Generation이 Scenario stdout에 직접 의존하지 않도록 합니다.
 
-## Evidence와 Detection의 경계
+## 실행 기록과 탐지 결과 구분
 
-DSP Core Pipeline은 사람 또는 선택적인 Adapter가 보안 플랫폼의 결과와 비교할 수 있는 Evidence를 생성하는 지점까지 담당합니다.
+DSP의 기본 처리 범위는 보안 플랫폼의 결과와 비교할 수 있도록 실행 기록을 남기는 데까지입니다.
 
 ```text
 S2: DSP Execution/Event Validation
@@ -106,16 +106,16 @@ Human Review / Customer POC Conclusion
 
 S3는 선택 사항이며 S2 Exit Code 또는 `ValidationResult`를 변경하지 않습니다.
 
-## 선택적인 Detection Confirmation
+## 선택적인 탐지 확인
 
 현재 CLI는 `--confirm-detection`과 세 가지 Stellar Client Mode를 제공합니다.
 
-- `manual` — API 없이 Evidence Template 생성
-- `mock` — CI/Demo를 위한 Deterministic Local Response
+- `manual` — API 없이 확인 템플릿 생성
+- `mock` — CI/데모를 위한 고정된 로컬 응답
 - `http` — Experimental Live Stellar HTTP Client
 
 일반적인 DSP 운영에는 Stellar API Token이 필요하지 않습니다.
 
 ## 중요한 설계 경계
 
-DSP는 **Detection Scenario Platform**이며 Automated Compromise Verifier가 아닙니다. Architecture는 Traffic Generation만으로 `attack_success`, Vendor Alert의 성공 여부 또는 XDR Case 성공을 추론하지 않도록 의도적으로 설계되어 있습니다.
+DSP는 **Detection Scenario Platform**이며 침해 여부를 자동 판정하는 도구가 아닙니다. Architecture는 Traffic Generation만으로 `attack_success`, Vendor Alert의 성공 여부 또는 XDR Case 성공을 추론하지 않도록 의도적으로 설계되어 있습니다.
