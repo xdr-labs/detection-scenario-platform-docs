@@ -1,13 +1,13 @@
 ---
 title: "Detection Scenario Platform"
-description: "Generate realistic security activity and evidence for repeatable XDR and NDR customer POC validation."
+description: "Generate realistic security activity for repeatable XDR and NDR customer POCs, and record exactly what DSP generated."
 ---
 
 # Detection Scenario Platform (DSP)
 
-**Generate realistic, observable security activity for XDR and NDR customer POC validation.**
+**Generate realistic security activity for XDR and NDR customer POCs, then verify what happened.**
 
-DSP helps POC engineers create repeatable security activity when a customer environment is too quiet to produce enough useful detections during an evaluation. It discovers reachable targets, executes controlled scenarios, records what happened, and produces evidence that can be compared with XDR/NDR detections.
+DSP helps POC engineers create repeatable security activity when a customer environment is too quiet to produce enough useful detections during an evaluation. It finds reachable targets, runs controlled scenarios, and records what it generated so engineers can compare the result with XDR/NDR detections.
 
 <Note>
 DSP proves **what activity it generated**. It does not automatically claim that an alert fired or that an XDR case was successfully correlated. Detection and case outcomes must be verified in the connected security platform.
@@ -36,13 +36,13 @@ DSP proves **what activity it generated**. It does not automatically claim that 
     Use the simplest local-mode path from prerequisites to the first report.
   </Card>
   <Card title="POC Workflow" icon="diagram-project" href="/poc-program">
-    See how target discovery, controlled activity, NDR/XDR detection review, and evidence fit together.
+    See the practical sequence from target discovery and controlled activity to XDR/NDR review and result recording.
   </Card>
   <Card title="Scenario Coverage" icon="radar" href="/scenarios">
     Review the current network, DNS, web, identity, and host-behavior scenarios.
   </Card>
   <Card title="XDR Correlation Demo" icon="link" href="/xdr-correlation-demo">
-    Combine DSP evidence, NDR detections, and optional external alerts into an XDR investigation story.
+    Combine DSP run records, NDR detections, and optional external alerts into a clear XDR investigation.
   </Card>
 </CardGroup>
 
@@ -74,7 +74,7 @@ Normal DSP execution does **not** require an XDR API token. Webshell mode is opt
   </Card>
 </CardGroup>
 
-## Current validation boundary
+## Current validation status
 
 DSP v1.4.0 is documented as **READY WITH KNOWN LIMITATIONS**. Local execution plus real JSP and PHP webshell execution are validated. ASPX/Windows IIS remains preview because real Windows webshell runtime validation is still pending.
 

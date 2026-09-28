@@ -1,9 +1,9 @@
 ---
 title: "Reports & Evidence"
-description: "Use DSP run artifacts to connect generated activity with XDR/NDR detection and customer POC evidence."
+description: "Use DSP run records to connect generated activity with XDR/NDR detections and customer POC results."
 ---
 
-# Reports & Evidence
+# Reports and Verification Records
 
 Every DSP run creates a dedicated directory under:
 
@@ -39,7 +39,7 @@ The operator menu's **Show latest report** option gives the quickest view of the
 | `investigation_notes.md` | Analyst/customer POC notes template |
 | `evidence_summary_template.md` | Template for customer-facing evidence |
 
-## Evidence flow
+## How the records fit together
 
 ```mermaid
 flowchart LR
@@ -51,17 +51,17 @@ flowchart LR
   M --> C[Customer evidence]
 ```
 
-For webshell runs, the remote host produces an `events.jsonl` bundle. DSP retrieves it, imports the events into the local Event Store, and continues through the same validation/report/evidence pipeline.
+For webshell runs, the remote host produces an `events.jsonl` bundle. DSP retrieves it, imports the events into the local Event Store, and continues through the same validation and reporting process.
 
 ## What `validation.json` means
 
 `validation.json` confirms DSP's **own execution and event expectations**. It is not an XDR/NDR alert verdict.
 
 <Note>
-A scenario can be generated successfully even if the security product does not alert. Treat DSP execution evidence and product-side detection evidence as separate layers.
+A scenario can be generated successfully even if the security product does not alert. Keep DSP execution records separate from the security product's detection results.
 </Note>
 
-## Recommended customer evidence chain
+## Recommended customer verification record
 
 Preserve this relationship for each important POC finding:
 

@@ -8,16 +8,16 @@ description: "몇 분 안에 DSP를 설치하고 가장 단순한 XDR/NDR 고객
 이 페이지는 DSP를 처음 사용하는 사용자가 가장 짧은 경로로 첫 결과를 확인할 수 있도록 구성되어 있습니다.
 
 <Info>
-첫 실행은 **local** + **normal**을 권장합니다. DSP 자체가 정상 동작하는지 확인하는 데 Webshell Mode나 XDR API Credential은 필요하지 않습니다.
+첫 실행은 **local** + **normal**을 권장합니다. DSP 자체 동작을 확인하는 데 Webshell 모드나 XDR API 인증 정보는 필요하지 않습니다.
 </Info>
 
 ## 1. 사전 조건 확인
 
-다음 조건을 만족하는 Linux Operator Host가 필요합니다.
+다음 조건을 만족하는 Linux 운영 호스트가 필요합니다.
 
 - Python **3.11 이상**
 - `git`, `curl`
-- 승인된 Target Network로의 Network Reachability
+- 승인된 대상 네트워크로의 연결
 - 승인된 CIDR과 테스트 시간대
 
 먼저 다음을 확인합니다.
@@ -38,7 +38,7 @@ Bootstrap Installer를 실행합니다.
 curl -fsSL https://raw.githubusercontent.com/xdr-labs/xdr-poc-script/release/v1.4.0-rc/install-dsp.sh | bash
 ```
 
-Installer는 기본적으로 `$HOME/xdr-poc-script`를 사용하고, DSP를 Clone 또는 Update하고 `.venv`를 생성한 뒤 Package를 설치하고 Operator Menu를 엽니다. `~/.dsp/` 아래의 기존 설정과 Run Artifact는 유지됩니다.
+Installer는 기본적으로 `$HOME/xdr-poc-script`를 사용하고, DSP 소스를 내려받거나 업데이트하고 `.venv`를 만든 뒤 필요한 패키지를 설치하고 운영 메뉴를 엽니다. `~/.dsp/` 아래의 기존 설정과 실행 기록는 유지됩니다.
 
 Menu가 열리지 않았다면 다음을 실행합니다.
 
@@ -57,10 +57,10 @@ $HOME/xdr-poc-script/dsp-menu.sh
 | Profile | `normal` |
 
 <Warning>
-예시 CIDR은 실제 POC에서 허가된 경우에만 사용하세요. DSP는 의도적으로 보안 관련 Network Activity를 생성합니다.
+예시 CIDR은 실제 POC에서 허가된 경우에만 사용하세요. DSP는 의도적으로 보안 관련 네트워크 활동를 생성합니다.
 </Warning>
 
-첫 실행에서는 Webshell 설정을 건드릴 필요가 없습니다. 고객 네트워크 내부 Host에서 Activity를 발생시켜야 할 때만 사용합니다.
+첫 실행에서는 Webshell 설정을 건드릴 필요가 없습니다. 고객 네트워크 내부 호스트에서 활동를 발생시켜야 할 때만 사용합니다.
 
 ## 4. 실행
 
@@ -73,13 +73,13 @@ source "$HOME/xdr-poc-script/.venv/bin/activate"
 dsp run --profile normal --target-net 10.10.10.0/24
 ```
 
-반드시 예시 CIDR을 실제 승인된 Target Network로 바꾸세요.
+반드시 예시 CIDR을 실제 승인된 대상 네트워크로 바꾸세요.
 
 ## 5. 결과 확인
 
 가장 빠른 확인 방법은 Menu의 **4 — Show latest report**입니다.
 
-각 Run은 다음 위치에도 저장됩니다.
+각 실행은 다음 위치에도 저장됩니다.
 
 ```text
 ~/.dsp/runs/<run_id>/
@@ -90,22 +90,22 @@ dsp run --profile normal --target-net 10.10.10.0/24
 | 파일 | 먼저 확인하는 이유 |
 | --- | --- |
 | `traffic_summary.json` | DSP가 어떤 Activity를 시도/생성했는지 확인 |
-| `report.md` | 사람이 읽기 쉬운 Run Summary |
-| `verification_checklist.md` | XDR/NDR Detection과 고객 Evidence를 기록 |
+| `report.md` | 사람이 읽기 쉬운 실행 요약 |
+| `verification_checklist.md` | XDR/NDR 탐지와 고객 검증 결과를 기록 |
 
 `events.db`, `events.jsonl`, `validation.json`은 상세 검증이나 Troubleshooting이 필요할 때 확인하면 됩니다.
 
 ## 무엇을 성공으로 볼 것인가?
 
-DSP Run 성공은 **Activity Generation과 Evidence Pipeline이 정상 동작했다는 의미**입니다. XDR/NDR 제품에서 Alert이 반드시 발생했다는 의미는 아닙니다.
+DSP 실행 성공은 **활동 생성과 실행 기록 생성이 정상적으로 끝났다는 의미**입니다. XDR/NDR 제품에서 Alert이 반드시 발생했다는 의미는 아닙니다.
 
-고객 POC에서는 동일한 시간대, Source/Destination Host, Scenario 유형을 XDR/NDR Console에서 확인하고, Matching Alert 또는 Case ID를 Evidence Template에 기록하세요.
+고객 POC에서는 동일한 시간대, 출발지/목적지 호스트, 시나리오 유형을 XDR/NDR Console에서 확인하고, 대응되는 Alert 또는 Case ID를 확인 템플릿에 기록하세요.
 
 ## 다음 단계
 
 <CardGroup cols={2}>
-  <Card title="POC Workflow" icon="diagram-project" href="/ko/poc-program">DSP Run을 반복 가능한 고객 검증 절차로 연결합니다.</Card>
-  <Card title="Scenario 범위" icon="radar" href="/ko/scenarios">현재 Profile이 생성할 수 있는 Activity 유형을 확인합니다.</Card>
-  <Card title="Webshell Mode" icon="terminal" href="/ko/execution-modes">필요할 때 승인된 내부 Host를 Execution Origin으로 사용합니다.</Card>
-  <Card title="Report & Evidence" icon="file-lines" href="/ko/reports-and-evidence">Run Artifact와 Evidence Chain을 이해합니다.</Card>
+  <Card title="POC 진행 절차" icon="diagram-project" href="/ko/poc-program">DSP 실행을 반복 가능한 고객 검증 절차로 연결합니다.</Card>
+  <Card title="Scenario 범위" icon="radar" href="/ko/scenarios">현재 프로필이 생성할 수 있는 활동 유형을 확인합니다.</Card>
+  <Card title="Webshell 모드" icon="terminal" href="/ko/execution-modes">필요할 때 승인된 내부 호스트를 실행 위치로 사용합니다.</Card>
+  <Card title="보고서 및 검증 자료" icon="file-lines" href="/ko/reports-and-evidence">실행 기록과 검증 자료를 확인합니다.</Card>
 </CardGroup>

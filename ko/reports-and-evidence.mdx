@@ -1,17 +1,17 @@
 ---
 title: "Report & Evidence"
-description: "DSP Run Artifact를 이용해 생성된 Activity와 XDR/NDR Detection, 고객 POC Evidence를 연결합니다."
+description: "DSP 실행 기록과 XDR/NDR 탐지 결과를 연결해 고객 POC 검증 자료로 정리하는 방법을 설명합니다."
 ---
 
-# Report & Evidence
+# 보고서 및 검증 자료
 
-각 DSP Run은 다음 위치에 전용 디렉터리를 생성합니다.
+각 DSP 실행은 다음 위치에 전용 디렉터리를 생성합니다.
 
 ```text
 ~/.dsp/runs/<run_id>/
 ```
 
-이 Run Directory는 **DSP가 무엇을 생성했는지**와 **XDR/NDR Platform이 무엇을 탐지했는지**를 연결하는 기준점입니다.
+이 실행 디렉터리는 **DSP가 무엇을 생성했는지**와 **XDR/NDR 플랫폼이 무엇을 탐지했는지**를 함께 확인하는 기준점입니다.
 
 ## 처음에는 이 세 파일만 확인
 
@@ -20,8 +20,8 @@ description: "DSP Run Artifact를 이용해 생성된 Activity와 XDR/NDR Detect
 | Artifact | 용도 |
 | --- | --- |
 | `traffic_summary.json` | Scenario Activity와 Counter 확인 |
-| `report.md` | 사람이 읽기 쉬운 Run Summary |
-| `verification_checklist.md` | 보안 Platform에서 확인한 Detection/Case Evidence 기록 |
+| `report.md` | 사람이 읽기 쉬운 실행 요약 |
+| `verification_checklist.md` | 보안 플랫폼에서 확인한 Detection/Case 결과 기록 |
 
 Operator Menu의 **Show latest report**가 최근 Run을 가장 빠르게 확인하는 방법입니다.
 
@@ -30,14 +30,14 @@ Operator Menu의 **Show latest report**가 최근 Run을 가장 빠르게 확인
 | Artifact | 용도 |
 | --- | --- |
 | `events.db` | SQLite Append-only Event Store, Run별 Source of Truth |
-| `events.jsonl` | Portable Event Export 및 Remote Webshell Collection 형식 |
-| `traffic_summary.json` | Scenario별 Activity Counter |
+| `events.jsonl` | 이벤트 내보내기 및 원격 Webshell 수집 형식 |
+| `traffic_summary.json` | 시나리오별 활동 수 |
 | `validation.json` | DSP Execution/Event Validation 결과 |
-| `report.md` | 사람이 읽기 쉬운 Run Report |
-| `report.json` | 생성되는 경우 Machine-readable Report Data |
+| `report.md` | 사람이 읽기 쉬운 실행 보고서 |
+| `report.json` | 생성되는 경우 기계가 읽을 수 있는 보고서 데이터 |
 | `verification_checklist.md` | XDR/NDR 결과 기록 Template |
 | `investigation_notes.md` | Analyst/고객 POC Note Template |
-| `evidence_summary_template.md` | 고객용 Evidence Summary Template |
+| `evidence_summary_template.md` | 고객용 검증 요약 템플릿 |
 
 ## Evidence 흐름
 
@@ -51,17 +51,17 @@ flowchart LR
   M --> C[Customer Evidence]
 ```
 
-Webshell Run에서는 Remote Host가 `events.jsonl` Bundle을 생성합니다. DSP가 이를 가져와 Local Event Store에 Import한 뒤 동일한 Validation/Report/Evidence Pipeline을 계속 수행합니다.
+Webshell 실행에서는 원격 호스트가 `events.jsonl` 번들을 생성합니다. DSP는 이 파일을 가져와 로컬 Event Store에 넣고 같은 검증 및 보고 절차를 계속 수행합니다.
 
 ## `validation.json`의 의미
 
-`validation.json`은 DSP의 **자체 Execution 및 Event 기대값**을 확인합니다. XDR/NDR Alert Verdict가 아닙니다.
+`validation.json`은 DSP가 **자체 실행과 이벤트 기대값**을 충족했는지 확인합니다. XDR/NDR Alert 결과를 판정하는 파일이 아닙니다.
 
 <Note>
-Scenario는 정상적으로 생성되었지만 보안 제품에서 Alert이 발생하지 않을 수 있습니다. DSP Execution Evidence와 Product-side Detection Evidence를 항상 별도 계층으로 관리하세요.
+Scenario는 정상적으로 생성되었지만 보안 제품에서 Alert이 발생하지 않을 수 있습니다. DSP 실행 기록과 보안 제품의 탐지 결과는 항상 구분해서 관리하세요.
 </Note>
 
-## 권장 고객 Evidence Chain
+## 권장 고객 검증 기록
 
 중요한 POC 결과마다 다음 관계를 보존하는 것을 권장합니다.
 
@@ -73,11 +73,11 @@ DSP Run ID
   → Screenshot/Export + Analyst Conclusion
 ```
 
-이 구조를 사용하면 최종 Report를 검증 가능하게 만들고, Activity Generation과 Detection Success를 혼동하지 않을 수 있습니다.
+이 구조를 사용하면 최종 보고서를 다시 확인할 수 있고, 활동 생성 성공과 보안 제품의 탐지 성공을 혼동하지 않을 수 있습니다.
 
 ## Report 재생성
 
-Run Artifact가 남아 있다면 다음으로 Report를 다시 생성할 수 있습니다.
+실행 기록이 남아 있다면 다음 명령으로 보고서를 다시 생성할 수 있습니다.
 
 ```bash
 dsp report --run-id <run_id>

@@ -23,28 +23,28 @@ dsp --version
 dsp run --target-net 10.10.10.0/24 --profile normal
 ```
 
-### 주요 Run Option
+### 주요 실행 옵션
 
 | Option | 값 / 기본값 | 용도 |
 | --- | --- | --- |
-| `--target-net` | 기본값 `10.10.10.0/24` | 승인된 Target CIDR |
-| `--profile` | `normal`, `high` | 자동 Operational Scenario Plan |
-| `--scenarios` | 쉼표로 구분한 ID | Advanced Scenario 직접 선택 |
+| `--target-net` | 기본값 `10.10.10.0/24` | 승인된 대상 CIDR |
+| `--profile` | `normal`, `high` | 자동 시나리오 실행 계획 |
+| `--scenarios` | 쉼표로 구분한 ID | 고급 시나리오 직접 선택 |
 | `--execution-provider` | `local` / `webshell` | Scenario 실행 위치 |
-| `--dry-run` | Flag | Network Activity 없이 실행 |
-| `--quiet` | Flag | Operational Progress Output 숨김 |
-| `--verbose` | Flag | 각 Action의 상세 Progress 표시 |
-| `--max-hosts` | 정수 | Target Expansion 및 Scenario Host Selection 상한 |
-| `--allow-large-target` | Flag | `/24`보다 큰 CIDR 허용, `--max-hosts` 필요 |
+| `--dry-run` | 플래그 | Network Activity 없이 실행 |
+| `--quiet` | 플래그 | Operational Progress Output 숨김 |
+| `--verbose` | 플래그 | 각 Action의 상세 Progress 표시 |
+| `--max-hosts` | 정수 | 대상 확장 및 시나리오 호스트 선택 상한 |
+| `--allow-large-target` | 플래그 | `/24`보다 큰 CIDR 허용, `--max-hosts` 필요 |
 
 ### Webshell Option
 
 | Option | 값 / 기본값 | 용도 |
 | --- | --- | --- |
 | `--webshell-family` | `jsp`, `php`, `aspx` | Webshell Mode에서 필수 |
-| `--webshell-url` | URL | 필수 Remote Endpoint |
+| `--webshell-url` | URL | 필수 원격 엔드포인트 |
 | `--remote-work-dir` | `/tmp/dsp` | Remote Bundle/Output Directory |
-| `--verify-tls` | Flag | Webshell Transport의 TLS Certificate 검증 |
+| `--verify-tls` | 플래그 | Webshell Transport의 TLS Certificate 검증 |
 
 ### Detection Confirmation Option
 
@@ -52,9 +52,9 @@ DSP에는 선택적인 S3 Confirmation 단계가 있습니다.
 
 | Option | 값 / 기본값 | 용도 |
 | --- | --- | --- |
-| `--confirm-detection` | Flag | DSP Execution Validation 이후 선택적인 Detection Confirmation 수행 |
-| `--detection-provider` | 기본값 `stellar` | Detection Provider 이름 |
-| `--stellar-client` | `manual`, `mock`, `http` | Manual Evidence, Local Mock 또는 Experimental Live HTTP Mode |
+| `--confirm-detection` | 플래그 | DSP 자체 검증 후 선택적인 탐지 확인 수행 |
+| `--detection-provider` | 기본값 `stellar` | 탐지 Provider 이름 |
+| `--stellar-client` | `manual`, `mock`, `http` | 수동 확인, 로컬 Mock 또는 실험적 Live HTTP 모드 |
 
 <Note>
 S3 Confirmation은 선택 사항이며 S2 Exit Code나 DSP `ValidationResult`를 변경하지 않습니다. 일반적인 DSP 운영에는 Stellar API Credential이 필요하지 않습니다.
@@ -66,7 +66,7 @@ Manual Confirmation Package:
 dsp run --profile normal --confirm-detection
 ```
 
-CI/Demo용 Deterministic Local Mock:
+CI/데모용 고정된 로컬 Mock:
 
 ```bash
 dsp run --profile normal --confirm-detection --stellar-client mock
@@ -83,7 +83,7 @@ dsp run \
   --target-net 10.10.10.0/24
 ```
 
-`--scenarios`는 자동 Profile Coverage보다 우선합니다. 동시에 `--profile`을 지정하면 선택된 Scenario에 Profile의 Volume/Host 설정이 적용됩니다.
+`--scenarios`는 자동 프로필 범위보다 우선합니다. 동시에 `--profile`을 지정하면 선택한 시나리오에 프로필의 실행량/호스트 설정이 적용됩니다.
 
 ## Webshell 예시
 
@@ -113,7 +113,7 @@ dsp run \
 dsp plugins list
 ```
 
-발견된 Plugin ID, Status 및 Status Reason을 표시합니다.
+발견된 Plugin ID와 상태, 상태 사유을 표시합니다.
 
 ## Report 재생성
 
@@ -121,7 +121,7 @@ dsp plugins list
 dsp report --run-id <run_id>
 ```
 
-기존 Run Artifact에서 Report를 다시 생성합니다.
+기존 실행 기록에서 보고서를 다시 생성합니다.
 
 ## Remote Runner
 
@@ -131,4 +131,4 @@ Python Package는 다음 Entry Point도 설치합니다.
 dsp-remote-scenario
 ```
 
-이 Entry Point는 Remote Webshell Execution Pipeline의 일부이며 일반적으로 POC Operator가 직접 실행하는 것이 아니라 DSP가 자동으로 Orchestration합니다.
+이 Entry Point는 원격 Webshell 실행 과정의 일부이며 일반적으로 POC 운영자가 직접 실행하는 것이 아니라 DSP가 자동으로 조정합니다.

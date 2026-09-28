@@ -5,7 +5,7 @@ description: "High-level DSP architecture from operator CLI through discovery, e
 
 # Architecture
 
-DSP separates **activity generation**, **event recording**, **validation/reporting**, and **security-platform confirmation** so a customer POC can preserve a clear evidence boundary.
+DSP separates **activity generation**, **event recording**, **validation/reporting**, and **security-platform confirmation** so engineers can tell DSP results from security-platform results.
 
 ## High-level flow
 
@@ -92,9 +92,9 @@ The Event Store feeds:
 
 This avoids coupling report generation directly to scenario stdout.
 
-## Evidence and detection boundary
+## DSP results vs. security-platform results
 
-DSP's core pipeline ends with evidence that a human or optional adapter can compare with the security platform.
+DSP's core pipeline ends after it records what DSP generated. An engineer or optional adapter can then compare that record with the security platform.
 
 ```text
 S2: DSP execution/event validation
