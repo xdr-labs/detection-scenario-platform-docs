@@ -1,6 +1,6 @@
 ---
 title: "XDR Correlation Demo"
-description: "Use DSP evidence, NDR detections, and optional third-party alerts to build a clear XDR investigation story."
+description: "Use DSP run records, NDR detections, and optional third-party alerts to build a clear XDR investigation."
 ---
 
 # XDR Correlation Demo
@@ -22,15 +22,15 @@ flowchart LR
 
 ## DSP's role
 
-DSP is responsible for **observable activity and execution evidence**. It can generate network, DNS, web, identity-service, protocol, and controlled host-side behavior, then record what it generated under a run ID.
+DSP is responsible for **generating activity and recording what it executed**. It can generate network, DNS, web, identity-service, protocol, and controlled host-side behavior, then record what it generated under a run ID.
 
 The XDR/NDR platform is responsible for detection, alerting, correlation, severity, and case creation.
 
 <Warning>
-A DSP PASS does not prove that a specific alert or XDR case exists. Always verify detection and correlation in the security platform and record the product-side evidence separately.
+A DSP PASS does not prove that a specific alert or XDR case exists. Verify detection and correlation in the security platform, and record those product-side results separately.
 </Warning>
 
-## Practical demo workflow
+## Practical demo sequence
 
 1. Run DSP inside the authorized scope.
 2. Confirm the intended activity in `traffic_summary.json` and `report.md`.
@@ -39,7 +39,7 @@ A DSP PASS does not prove that a specific alert or XDR case exists. Always verif
 5. Verify whether the platform correlates the related signals into a case.
 6. Capture the detection IDs, case ID, timestamps, hosts, screenshots, and analyst conclusion.
 
-## Evidence checklist
+## Verification checklist
 
 For each signal used in the demo, capture:
 
@@ -60,6 +60,6 @@ XDR/NDR evidence = activity was detected or exposed
 XDR case evidence = related signals were correlated/investigated
 ```
 
-<Card title="Build the evidence chain" icon="file-lines" href="/reports-and-evidence">
+<Card title="Build the verification record" icon="file-lines" href="/reports-and-evidence">
   Use DSP run artifacts and product-side IDs/screenshots to create an auditable POC record.
 </Card>
