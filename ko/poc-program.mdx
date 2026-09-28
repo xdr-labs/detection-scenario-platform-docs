@@ -1,13 +1,13 @@
 ---
-title: "고객 POC Workflow"
-description: "DSP Activity 생성, XDR/NDR Detection 확인, 고객 Evidence 보존을 위한 실용적인 POC 절차입니다."
+title: "고객 POC 진행 절차"
+description: "DSP로 활동을 생성하고 XDR/NDR 탐지 결과를 확인해 고객 검증 자료로 정리하는 POC 절차입니다."
 ---
 
-# 고객 POC Workflow
+# 고객 POC 진행 절차
 
-DSP는 고객 POC에서 흔한 문제를 해결하기 위해 설계되었습니다. 정상적이거나 폐쇄된 고객 Network에서는 짧은 평가 기간 동안 충분한 Detection이 발생하지 않을 수 있습니다.
+DSP는 고객 POC에서 흔한 문제를 해결하기 위해 설계되었습니다. 정상적이거나 폐쇄된 고객 네트워크에서는 짧은 평가 기간 동안 충분한 탐지 사례가 발생하지 않을 수 있습니다.
 
-목표는 또 하나의 공격 Framework를 만드는 것이 아닙니다. 통제된 Activity를 사용하여 **XDR/NDR Detection과 Investigation 가치를 눈에 보이게 하고 반복 가능하며 보고 가능한 형태로 만드는 것**입니다.
+목표는 또 하나의 공격 Framework를 만드는 것이 아닙니다. 통제된 활동을 사용해 **XDR/NDR의 탐지와 조사 과정을 고객이 직접 확인하고 반복해서 검증할 수 있게 하는 것**입니다.
 
 ## 권장 POC 흐름
 
@@ -24,14 +24,14 @@ flowchart LR
 실제 고객 POC에서는 다음 흐름을 권장합니다.
 
 1. 승인된 CIDR, 제외 대상, Test Window를 합의합니다.
-2. 내부 Execution Origin이 필요하지 않다면 `local` + `normal`로 시작합니다.
-3. DSP를 실행하고 DSP 자체의 Execution Evidence를 확인합니다.
-4. 같은 시간대와 Host를 XDR/NDR Console에서 확인합니다.
+2. 내부 호스트에서 실행할 필요가 없다면 `local` + `normal`로 시작합니다.
+3. DSP를 실행하고 실제 생성된 활동과 실행 기록을 확인합니다.
+4. 같은 시간대와 호스트를 XDR/NDR 콘솔에서 확인합니다.
 5. Matching Detection ID, Screenshot, Note를 기록합니다.
-6. XDR Platform이 관련 Signal을 Correlation한다면 Case Timeline을 고객 Evidence에 포함합니다.
+6. XDR 플랫폼이 관련 Signal을 하나의 Case로 연결했다면 Case 타임라인을 고객 검증 자료에 포함합니다.
 
 <Note>
-`dsp run`은 Target Expansion, Discovery/Prefetch, Scenario Ordering, Execution, Event Store 기록, Validation, Reporting, Evidence Generation을 하나의 Operational Flow로 수행합니다. 위 Diagram은 고객 POC 관점의 흐름이며 각 단계가 별도 CLI 명령이라는 의미는 아닙니다.
+`dsp run`은 대상 확장, 탐색, 시나리오 순서 결정, 실행, Event Store 기록, 검증, 보고를 한 번에 처리합니다. 위 그림은 고객 POC의 전체 흐름을 보여주며 각 단계가 별도 CLI 명령이라는 뜻은 아닙니다.
 </Note>
 
 ## Operator가 실제로 결정하는 세 가지
@@ -50,19 +50,19 @@ POC Activity를 고객 Network **내부**의 명시적으로 승인된 Test Host
 
 현재 Release에서 ASPX/Windows IIS는 Preview 상태입니다.
 
-## 세 종류의 Evidence를 분리해서 보기
+## 세 종류의 검증 자료를 구분해서 보기
 
-| 계층 | 질문 | Evidence |
+| 계층 | 질문 | 확인 자료 |
 | --- | --- | --- |
-| DSP Execution | DSP가 의도한 Activity를 생성했는가? | `traffic_summary.json`, Event Store, `report.md` |
-| Detection | XDR/NDR에서 해당 Activity가 탐지 또는 관찰되었는가? | Detection/Alert ID, Timestamp, Host |
-| Investigation | 관련 Signal이 의미 있는 XDR Case/Story로 연결되었는가? | Case ID, Timeline, Screenshot, Analyst Note |
+| DSP 실행 | DSP가 의도한 활동을 생성했는가? | `traffic_summary.json`, Event Store, `report.md` |
+| 탐지 | XDR/NDR에서 해당 활동이 탐지 또는 관찰되었는가? | Detection/Alert ID, 시간, 호스트 |
+| 조사 | 관련 Signal이 의미 있는 XDR Case로 연결되었는가? | Case ID, 타임라인, 화면 캡처, 분석가 메모 |
 
 이 세 계층을 분리하면 DSP 자체가 증명하는 범위를 과장하지 않을 수 있습니다.
 
 <CardGroup cols={2}>
   <Card title="Scenario 범위" icon="radar" href="/ko/scenarios">POC 목적에 맞는 Activity 유형을 선택합니다.</Card>
   <Card title="XDR Correlation Demo" icon="link" href="/ko/xdr-correlation-demo">NDR Detection과 선택적인 External Alert을 하나의 XDR Investigation Story로 연결합니다.</Card>
-  <Card title="Report & Evidence" icon="file-lines" href="/ko/reports-and-evidence">DSP Run부터 고객 Proof까지 검증 가능한 Evidence Chain을 만듭니다.</Card>
+  <Card title="Report & Evidence" icon="file-lines" href="/ko/reports-and-evidence">DSP 실행부터 고객 검증 결과까지 추적할 수 있는 기록을 만듭니다.</Card>
   <Card title="Safety & Guardrails" icon="shield" href="/ko/safety-and-guardrails">실행 전에 Scope, Host Cap, Execution Origin을 확인합니다.</Card>
 </CardGroup>
