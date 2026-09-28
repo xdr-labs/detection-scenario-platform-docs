@@ -1,9 +1,9 @@
 ---
-title: "설정 및 Profile"
-description: "XDR/NDR POC를 위한 Target Scope, Execution Mode, DSP Coverage Profile을 설정합니다."
+title: "설정 및 프로필"
+description: "XDR/NDR POC의 대상 범위, 실행 방식, 실행 범위 프로필을 설정합니다."
 ---
 
-# 설정 및 Profile
+# 설정 및 프로필
 
 DSP Operator Menu는 설정을 다음 위치에 저장합니다.
 
@@ -43,22 +43,22 @@ EXECUTION_MODE=local
 PROFILE=normal
 ```
 
-`TARGET_NET`만 실제 승인된 고객/Lab CIDR로 설정하세요. Activity를 Target Network 내부의 승인된 Host에서 발생시켜야 할 때만 Webshell Mode로 이동합니다.
+`TARGET_NET`만 실제 승인된 고객/랩 CIDR로 설정하세요. 활동을 대상 네트워크 내부의 승인된 호스트에서 발생시켜야 할 때만 Webshell 모드를 사용합니다.
 
 ## Operational Profile
 
-현재 v1.4.0 Runtime은 두 Profile을 지원합니다.
+현재 v1.4.0은 두 프로필을 지원합니다.
 
 | Profile | Scenario Set | Target Coverage | 대상별 Volume |
 | --- | --- | --- | --- |
-| `normal` | 전체 Active Operational Scenario | 대표 대상, 일반적으로 최대 2개 | Standard |
-| `high` | 동일한 Scenario Set | Guardrail 범위에서 발견된 전체 대상으로 확장 | **normal과 동일** |
+| `normal` | 활성 시나리오 전체 | 대표 대상, 일반적으로 최대 2개 | Standard |
+| `high` | 동일한 시나리오 구성 | Guardrail 범위에서 발견된 전체 대상으로 확장 | **normal과 동일** |
 
 <Note>
-`high`는 대상별 Intensity를 높이는 것이 아니라 **Coverage를 넓히는 Profile**입니다. 다만 더 많은 Host가 참여하므로 전체 Aggregate Traffic은 증가할 수 있습니다.
+`high`는 대상별 실행 강도를 높이는 것이 아니라 **더 많은 대상을 포함하는 프로필**입니다. 다만 더 많은 호스트가 참여하므로 전체 트래픽 양은 증가할 수 있습니다.
 </Note>
 
-### 이전 Profile 이름
+### 이전 프로필 이름
 
 호환성을 위해 Runtime은 이전 이름을 다음처럼 처리합니다.
 
@@ -70,7 +70,7 @@ PROFILE=normal
 
 새로운 설정에서는 `normal`과 `high`만 사용하세요.
 
-## 현재 Scenario 순서
+## 현재 시나리오 순서
 
 ```text
 host_behavior_check
@@ -86,7 +86,7 @@ rare_protocol_activity
 dns_tunnel
 ```
 
-Inactive Plugin은 Runtime에서 제외됩니다. Webshell Mode에서는 사용 가능한 경우 `host_behavior_check`가 첫 Host Activity 단계로 포함됩니다.
+비활성 Plugin은 실행 대상에서 제외됩니다. Webshell Mode에서는 사용 가능한 경우 `host_behavior_check`가 첫 호스트 활동 단계로 포함됩니다.
 
 ## Large Target Guardrail
 
@@ -100,7 +100,7 @@ dsp run \
   --max-hosts 10
 ```
 
-## 특정 Scenario 직접 선택
+## 특정 시나리오 직접 선택
 
 ```bash
 dsp run \
@@ -109,8 +109,8 @@ dsp run \
   --target-net 10.10.10.0/24
 ```
 
-`--scenarios`를 지정하면 명시한 Scenario List가 우선합니다. 동시에 `--profile`을 지정하면 해당 Scenario에 Profile의 Volume 및 Host Limit이 적용됩니다.
+`--scenarios`를 지정하면 명시한 시나리오 목록가 우선합니다. 동시에 `--profile`을 지정하면 해당 시나리오에 프로필의 실행량과 호스트 수 제한이 적용됩니다.
 
 <Card title="Scenario Reference" icon="radar" href="/ko/scenarios">
-  각 Operational Scenario가 어떤 Activity를 생성하는지 확인합니다.
+  각 시나리오가 어떤 활동을 생성하는지 확인합니다.
 </Card>
