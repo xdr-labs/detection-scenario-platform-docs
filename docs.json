@@ -4,7 +4,9 @@
   "name": "Detection Scenario Platform",
   "description": "Documentation for Detection Scenario Platform (DSP) — realistic security activity generation, evidence collection, and XDR/NDR customer POC validation.",
   "colors": {
-    "primary": "#16A34A"
+    "primary": "#1F59E0",
+    "light": "#2982E8",
+    "dark": "#5B8CFF"
   },
   "logo": {
     "light": "/logo/light.svg",
